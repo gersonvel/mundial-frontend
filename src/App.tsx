@@ -15,12 +15,12 @@ function App() {
           {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
 
-          {/* 🛡️ CAPA PROTEGIDA 1: Para cualquier usuario logueado (USER o ADMIN) */}
+          {/* CAPA PROTEGIDA 1: Para cualquier usuario logueado (USER o ADMIN) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
-          {/* 🛡️ CAPA PROTEGIDA 2: Exclusiva para administradores */}
+          {/* CAPA PROTEGIDA 2: Exclusiva para administradores */}
           <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
             <Route path="/admin" element={<AdminPanel />} />
           </Route>
