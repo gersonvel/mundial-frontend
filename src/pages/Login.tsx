@@ -1,0 +1,113 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
+import { IoFootball } from "react-icons/io5"; // Icono de balón de fútbol de react-icons
+
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
+
+    const result = await login(username, password);
+    setIsSubmitting(false);
+
+    if (result.success) {
+      // Leemos los roles para saber a dónde redirigir al usuario
+      const rolesStr = localStorage.getItem("roles");
+      if (rolesStr && rolesStr.includes("ROLE_ADMIN")) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+    } else {
+      setError(result.message || "Credenciales inválidas");
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-800 to-emerald-950 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-2xl">
+        {/* Encabezado con Icono */}
+        <div className="text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+            {/* Animación sutil de rotación para el balón */}
+            <IoFootball
+              className="h-10 w-10 animate-spin"
+              style={{ animationDuration: "6s" }}
+            />
+          </div>
+          <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">
+            {/* Quiniela Mundial 2026 */}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Inicia sesión para registrar tus pronósticos
+          </p>
+        </div>
+
+        {/* Alerta de Error en caso de credenciales incorrectas */}
+        {error && (
+          <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 border-l-4 border-red-500 font-medium">
+            {error}
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4 rounded-md shadow-sm">
+            {/* Input Usuario */}
+            <div>
+              <label className="text-sm font-semibold text-gray-700 block mb-1">
+                Nombre de Usuario
+              </label>
+              <input
+                type="text"
+                required
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-950 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm transition-colors"
+                placeholder="Ej. crack2026"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+
+            {/* Input Password */}
+            <div>
+              <label className="text-sm font-semibold text-gray-700 block mb-1">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                required
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-950 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm transition-colors"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Botón de Enviar */}
+          <div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="group relative flex w-full justify-center rounded-lg bg-green-600 px-4 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-gray-400 transition-colors cursor-pointer"
+            >
+              {isSubmitting ? "Verificando..." : "Entrar a la Cancha"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
