@@ -340,9 +340,17 @@ const AdminPanel = () => {
 
                         {/* Versus e Inputs */}
                         <div className="flex items-center justify-center space-x-4 w-full sm:w-auto">
-                          <span className="font-bold text-base sm:text-lg text-right w-24 truncate">
-                            {partido.equipoLocal}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-bold">
+                              {partido.equipoLocal}
+                            </span>
+
+                            <img
+                              src={`/banderas/${partido.banderaLocal}`}
+                              alt={partido.equipoLocal}
+                              className="w-8 h-5 object-cover rounded shadow-md mr-5"
+                            />
+                          </div>
 
                           {partido.estado === "JUGADO" ? (
                             <div className="flex flex-col items-center">
@@ -389,9 +397,16 @@ const AdminPanel = () => {
                             </div>
                           )}
 
-                          <span className="font-bold text-base sm:text-lg text-left w-24 truncate">
-                            {partido.equipoVisitante}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-bold">
+                              {partido.equipoVisitante}
+                            </span>
+                            <img
+                              src={`/banderas/${partido.banderaVisitante}`}
+                              alt={partido.equipoVisitante}
+                              className="w-8 h-5 object-cover rounded shadow-md mr-5"
+                            />
+                          </div>
                         </div>
 
                         {/* Botones de acción */}

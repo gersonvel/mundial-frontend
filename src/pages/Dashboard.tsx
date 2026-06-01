@@ -326,36 +326,51 @@ const Dashboard = () => {
                       return (
                         <div
                           key={partido.id}
-                          className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between"
+                          className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-300"
                         >
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-[11px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-md">
+                          {/* Encabezado: Fase y Fecha */}
+                          <div className="flex items-center justify-between mb-5">
+                            <span className="text-[11px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-0.5 rounded-md tracking-wider">
                               {partido.fase.replace("_", " ")}
                             </span>
                             <div className="text-xs text-slate-400 flex items-center gap-1 font-medium">
-                              <IoTimeOutline className="w-4 h-4" />
+                              <IoTimeOutline className="w-4 h-4 text-slate-400" />
                               {formatearFecha(partido.fechaHora)}
                             </div>
                           </div>
-                          <div className="grid grid-cols-3 items-center text-center my-2">
-                            <div>
-                              <span className="font-extrabold text-slate-800 text-sm md:text-base block truncate">
-                                {partido.equipoLocal}
-                              </span>
-                              <span className="text-[10px] uppercase font-bold text-slate-400">
-                                Local
-                              </span>
+
+                          <div className="grid grid-cols-[1fr_auto_1fr] items-center my-2 gap-4">
+                            {/* 🏠 1. EQUIPO LOCAL (Empuja todo hacia la derecha, bandera al centro) */}
+                            <div className="flex items-center justify-end gap-3 min-w-0">
+                              <div className="text-right min-w-0">
+                                <span
+                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  title={partido.equipoLocal}
+                                >
+                                  {partido.equipoLocal}
+                                </span>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                  Local
+                                </span>
+                              </div>
+                              <img
+                                src={`/banderas/${partido.banderaLocal}`}
+                                alt={partido.equipoLocal}
+                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                              />
                             </div>
-                            <div className="flex items-center justify-center gap-2">
+
+                            {/* 🔢 2. CONTENEDOR CENTRAL (Marcadores compactos) */}
+                            <div className="flex items-center justify-center gap-2 px-1">
                               <input
                                 type="number"
                                 min="0"
                                 placeholder="-"
                                 disabled={yaPronosticado}
-                                className={`w-12 h-12 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all ${
+                                className={`w-11 h-11 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
                                   yaPronosticado
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
-                                    : "bg-slate-50 border-slate-300"
+                                    : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
                                 value={pronosticoLocal[partido.id] ?? ""}
                                 onChange={(e) =>
@@ -365,18 +380,18 @@ const Dashboard = () => {
                                   })
                                 }
                               />
-                              <span className="text-slate-400 font-extrabold text-sm">
-                                x
+                              <span className="text-slate-300 font-black text-xs uppercase px-0.5">
+                                vs
                               </span>
                               <input
                                 type="number"
                                 min="0"
                                 placeholder="-"
                                 disabled={yaPronosticado}
-                                className={`w-12 h-12 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all ${
+                                className={`w-11 h-11 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
                                   yaPronosticado
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
-                                    : "bg-slate-50 border-slate-300"
+                                    : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
                                 value={pronosticoVisitante[partido.id] ?? ""}
                                 onChange={(e) =>
@@ -387,18 +402,31 @@ const Dashboard = () => {
                                 }
                               />
                             </div>
-                            <div>
-                              <span className="font-extrabold text-slate-800 text-sm md:text-base block truncate">
-                                {partido.equipoVisitante}
-                              </span>
-                              <span className="text-[10px] uppercase font-bold text-slate-400">
-                                Visitante
-                              </span>
+
+                            <div className="flex items-center justify-start gap-3 min-w-0">
+                              <img
+                                src={`/banderas/${partido.banderaVisitante}`}
+                                alt={partido.equipoVisitante}
+                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                              />
+                              <div className="text-left min-w-0">
+                                <span
+                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  title={partido.equipoVisitante}
+                                >
+                                  {partido.equipoVisitante}
+                                </span>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                  Visitante
+                                </span>
+                              </div>
                             </div>
                           </div>
+
+                          {/* Botón de Acción */}
                           <div className="mt-5 pt-3 border-t border-slate-100 flex justify-end">
                             {yaPronosticado ? (
-                              <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-xl">
+                              <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50/60 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
                                 <IoCheckmarkCircleOutline className="w-4 h-4" />
                                 Pronóstico Enviado
                               </div>
@@ -407,7 +435,7 @@ const Dashboard = () => {
                                 onClick={() =>
                                   handleGuardarPronostico(partido.id)
                                 }
-                                className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
+                                className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md cursor-pointer"
                               >
                                 <IoCheckmarkCircleOutline className="w-4 h-4" />
                                 Enviar Pronóstico

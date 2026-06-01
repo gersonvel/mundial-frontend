@@ -32,6 +32,8 @@ export interface Partido {
   fase: string;
   grupo: string | null;
   ganadorPenales?: string | null; 
+  banderaLocal?: string;
+  banderaVisitante?: string;
 }
 
 export interface ResponseDTO<T> {
