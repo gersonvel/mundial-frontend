@@ -1,15 +1,16 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api'
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
 });
 
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     
-    // SI LA URL INCLUYE '/auth/', NO SE ENVÍA EL TOKEN VIEJO
-    if (token && config.url && !config.url.includes('/auth/')) {
+    const esRutaLoginORegistro = config.url?.endsWith('/auth/login') || config.url?.endsWith('/auth/registro');
+
+    if (token && token !== 'undefined' && token !== 'null' && !esRutaLoginORegistro) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     

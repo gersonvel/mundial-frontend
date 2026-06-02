@@ -134,7 +134,7 @@ const AdminPanel = () => {
         ganadorPenales: ganadorPenalesDto,
       });
 
-      alert("🏆 ¡Resultado oficial guardado y puntos distribuidos!");
+      alert("¡Resultado oficial guardado y puntos distribuidos!");
       cargarPartidos();
     } catch (error: any) {
       alert(error.response?.data?.message || "Error al guardar el resultado");

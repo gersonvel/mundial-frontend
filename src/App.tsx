@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
 import { ProtectedRoute } from "./components/ProtectedRoute"; //   Importamos el guardián
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* CAPA PROTEGIDA 1: Para cualquier usuario logueado (USER o ADMIN) */}
           <Route element={<ProtectedRoute />}>

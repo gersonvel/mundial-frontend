@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import api from "../api/axios";
 import { AuthContext } from "./AuthContext";
-import type { UserState, ResponseDTO } from "../types";
+import type { UserState } from "../types";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   //   Nace con los datos cargados al instante, sin retrasos
@@ -19,22 +19,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await api.post<
-        ResponseDTO<{ token: string; roles: string[]; username: string }>
-      >("/auth/login", { username, password });
-      const { token, roles, username: loggedUser } = response.data.data;
+      const response = await api.post("/auth/login", { username, password });
 
-      localStorage.setItem("token", token);
+      const { jwt, roles, username: loggedUser } = response.data;
+
+      localStorage.setItem("token", jwt);
       localStorage.setItem("username", loggedUser);
       localStorage.setItem("roles", JSON.stringify(roles));
 
       setUser({ username: loggedUser, roles });
       return { success: true };
     } catch (error: any) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error al iniciar sesión",
-      };
+      return { success: false, message: "Error al iniciar sesión" };
     }
   };
 

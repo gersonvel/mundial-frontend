@@ -54,3 +54,11 @@ export interface PartidoConPronostico {
   partido: Partido;
   pronostico: Prediccion | null;
 }
+
+export interface AuthResponse {
+  username: string;
+  token: string;
+  roles: string[];
+  message?: string;
+  success?: boolean;
+}

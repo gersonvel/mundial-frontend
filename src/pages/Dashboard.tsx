@@ -151,7 +151,7 @@ const Dashboard = () => {
         golesVisitantePred: parseInt(gVisitante, 10),
       });
 
-      alert("🎯 ¡Pronóstico registrado con éxito!");
+      alert("¡Pronóstico registrado con éxito!");
       setPartidosPronosticados((prev) => [...prev, partidoId]);
 
       const resPredicciones = await api.get<ResponseDTO<any[]>>(
@@ -310,7 +310,7 @@ const Dashboard = () => {
               <div className="space-y-6">
                 <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                   <IoFootballOutline className="text-green-600 h-6 w-6" />
-                  Fixture Disponible
+                  Partidos
                 </h2>
                 {partidosActivosValidos.length === 0 ? (
                   <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400 shadow-sm">
@@ -365,6 +365,7 @@ const Dashboard = () => {
                               <input
                                 type="number"
                                 min="0"
+                                step="1"
                                 placeholder="-"
                                 disabled={yaPronosticado}
                                 className={`w-11 h-11 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
@@ -372,13 +373,28 @@ const Dashboard = () => {
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
                                     : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
+                                onKeyDown={(e) => {
+                                  if (
+                                    e.key === "." ||
+                                    e.key === "," ||
+                                    e.key === "e" ||
+                                    e.key === "E" ||
+                                    e.key === "-"
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                                 value={pronosticoLocal[partido.id] ?? ""}
-                                onChange={(e) =>
+                                onChange={(e) => {
+                                  const valorLimpio = e.target.value.replace(
+                                    /[^0-9]/g,
+                                    "",
+                                  );
                                   setPronosticoLocal({
                                     ...pronosticoLocal,
-                                    [partido.id]: e.target.value,
-                                  })
-                                }
+                                    [partido.id]: valorLimpio,
+                                  });
+                                }}
                               />
                               <span className="text-slate-300 font-black text-xs uppercase px-0.5">
                                 vs
@@ -393,13 +409,28 @@ const Dashboard = () => {
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
                                     : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
+                                onKeyDown={(e) => {
+                                  if (
+                                    e.key === "." ||
+                                    e.key === "," ||
+                                    e.key === "e" ||
+                                    e.key === "E" ||
+                                    e.key === "-"
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                                 value={pronosticoVisitante[partido.id] ?? ""}
-                                onChange={(e) =>
+                                onChange={(e) => {
+                                  const valorLimpio = e.target.value.replace(
+                                    /[^0-9]/g,
+                                    "",
+                                  );
                                   setPronosticoVisitante({
                                     ...pronosticoVisitante,
-                                    [partido.id]: e.target.value,
-                                  })
-                                }
+                                    [partido.id]: valorLimpio,
+                                  });
+                                }}
                               />
                             </div>
 
@@ -543,9 +574,24 @@ const Dashboard = () => {
                           </div>
 
                           <div className="grid grid-cols-3 items-center text-center my-3 bg-slate-50/50 rounded-xl p-3 border border-slate-100">
-                            <span className="font-extrabold text-slate-800 text-sm truncate">
-                              {part.equipoLocal}
-                            </span>
+                            <div className="flex items-center justify-end gap-3 min-w-0">
+                              <div className="text-right min-w-0">
+                                <span
+                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  title={part.equipoLocal}
+                                >
+                                  {part.equipoLocal}
+                                </span>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                  Local
+                                </span>
+                              </div>
+                              <img
+                                src={`/banderas/${part.banderaLocal}`}
+                                alt={part.equipoLocal}
+                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                              />
+                            </div>
                             <div className="flex flex-col items-center justify-center">
                               <span
                                 className={`text-xl font-black tracking-widest ${esNoApostado ? "text-red-500" : "text-slate-900"}`}
@@ -560,9 +606,24 @@ const Dashboard = () => {
                                 {esNoApostado ? "Sin Pronóstico" : "Tu Apuesta"}
                               </span>
                             </div>
-                            <span className="font-extrabold text-slate-800 text-sm truncate">
-                              {part.equipoVisitante}
-                            </span>
+                            <div className="flex items-center justify-start gap-3 min-w-0">
+                              <img
+                                src={`/banderas/${part.banderaVisitante}`}
+                                alt={part.equipoVisitante}
+                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                              />
+                              <div className="text-left min-w-0">
+                                <span
+                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  title={part.equipoVisitante}
+                                >
+                                  {part.equipoVisitante}
+                                </span>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                  Visitante
+                                </span>
+                              </div>
+                            </div>
                           </div>
 
                           {esFinalizado ? (

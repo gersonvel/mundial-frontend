@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { IoFootball } from "react-icons/io5"; // Icono de balón de fútbol de react-icons
 
@@ -17,18 +17,22 @@ const Login = () => {
     setError(null);
     setIsSubmitting(true);
 
+    // 1. Intentamos iniciar sesión
     const result = await login(username, password);
-    setIsSubmitting(false);
 
     if (result.success) {
-      // Leemos los roles para saber a dónde redirigir al usuario
-      const rolesStr = localStorage.getItem("roles");
-      if (rolesStr && rolesStr.includes("ROLE_ADMIN")) {
-        navigate("/admin");
+      const rolesRaw = localStorage.getItem("roles");
+      const roles: string[] = rolesRaw ? JSON.parse(rolesRaw) : [];
+
+      setIsSubmitting(false);
+
+      if (roles.includes("ROLE_ADMIN")) {
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       }
     } else {
+      setIsSubmitting(false);
       setError(result.message || "Credenciales inválidas");
     }
   };
@@ -48,9 +52,9 @@ const Login = () => {
           <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">
             {/* Quiniela Mundial 2026 */}
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          {/* <p className="mt-2 text-sm text-gray-600">
             Inicia sesión para registrar tus pronósticos
-          </p>
+          </p> */}
         </div>
 
         {/* Alerta de Error en caso de credenciales incorrectas */}
@@ -72,7 +76,7 @@ const Login = () => {
                 type="text"
                 required
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-950 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm transition-colors"
-                placeholder="Ej. crack2026"
+                placeholder="usuario"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -103,6 +107,14 @@ const Login = () => {
             >
               {isSubmitting ? "Verificando..." : "Entrar a la Cancha"}
             </button>
+          </div>
+          <div className="mt-6 text-center text-xs font-medium text-slate-400">
+            <Link
+              to="/register"
+              className="text-green-600 hover:underline font-bold"
+            >
+              Registrate
+            </Link>
           </div>
         </form>
       </div>
