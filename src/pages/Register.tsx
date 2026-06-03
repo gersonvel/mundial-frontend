@@ -6,6 +6,7 @@ import {
   IoLockClosedOutline,
   IoFootballOutline,
 } from "react-icons/io5";
+import { toast } from "sonner";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -34,12 +35,12 @@ const Register = () => {
     setLoading(false);
 
     try {
-      // Disparamos al endpoint que acabamos de refactorizar en Java
       await api.post("/auth/registro", { username, password });
 
-      alert("¡Usuario creado con éxito! Ya puedes iniciar sesión.");
-      navigate("/login"); // Redireccionamos al Login
+      toast.success("¡Usuario creado con éxito! Ya puedes iniciar sesión.");
+      navigate("/login");
     } catch (err: any) {
+      console.error("Error al registrar el usuario:", err);
       setError(err.response?.data?.message || "Error al registrar el usuario");
     } finally {
       setLoading(false);

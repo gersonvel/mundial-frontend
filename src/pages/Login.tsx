@@ -50,7 +50,7 @@ const Login = () => {
             />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">
-            {/* Quiniela Mundial 2026 */}
+            Quiniela Mundial 2026
           </h2>
           {/* <p className="mt-2 text-sm text-gray-600">
             Inicia sesión para registrar tus pronósticos

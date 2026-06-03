@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import api from "../api/axios";
 import type { Partido, ResponseDTO } from "../types";
 import { IoSaveOutline, IoTimeOutline, IoTrashOutline } from "react-icons/io5";
+import { toast } from "sonner";
 
 const AdminPanel = () => {
   const [equipoLocal, setEquipoLocal] = useState("");
@@ -96,7 +97,8 @@ const AdminPanel = () => {
       gLocal === "" ||
       gVisitante === ""
     ) {
-      alert("Por favor, ingresa ambos marcadores antes de guardar.");
+      // alert("Por favor, ingresa ambos marcadores antes de guardar.");
+      toast.warning("Por favor, ingresa ambos marcadores antes de guardar.");
       return;
     }
 
@@ -104,7 +106,8 @@ const AdminPanel = () => {
     const golesVisitanteNum = parseInt(gVisitante, 10);
 
     if (golesLocalNum < 0 || golesVisitanteNum < 0) {
-      alert(" ¡Los goles no pueden ser números negativos!");
+      toast.warning("¡Los goles no pueden ser números negativos!");
+      // alert(" ¡Los goles no pueden ser números negativos!");
       return;
     }
 
@@ -119,9 +122,12 @@ const AdminPanel = () => {
     ) {
       const seleccion = ganadoresPenales[partidoId];
       if (!seleccion || seleccion === "") {
-        alert(
+        toast.warning(
           ` El partido es de eliminación directa y quedó empatado. Por favor, selecciona abajo qué equipo avanzó en la tanda de penales.`,
         );
+        // alert(
+        //   ` El partido es de eliminación directa y quedó empatado. Por favor, selecciona abajo qué equipo avanzó en la tanda de penales.`,
+        // );
         return;
       }
       ganadorPenalesDto = seleccion; // Mandará "LOCAL" o "VISITANTE" de forma limpia
@@ -133,24 +139,41 @@ const AdminPanel = () => {
         golesVisitante: golesVisitanteNum,
         ganadorPenales: ganadorPenalesDto,
       });
-
-      alert("¡Resultado oficial guardado y puntos distribuidos!");
+      toast.success("¡Resultado oficial guardado y puntos distribuidos!");
+      // alert("¡Resultado oficial guardado y puntos distribuidos!");
       cargarPartidos();
     } catch (error: any) {
-      alert(error.response?.data?.message || "Error al guardar el resultado");
+      toast.error(
+        error.response?.data?.message || "Error al guardar el resultado",
+      );
+      // alert(error.response?.data?.message || "Error al guardar el resultado");
     }
   };
 
-  const handleEliminarPartido = async (partidoId: number) => {
-    if (!window.confirm(" ¿Estás seguro de que deseas eliminar este partido?"))
-      return;
+  const ejecutarEliminarPartido = async (partidoId: number) => {
     try {
       await api.delete(`/partidos/${partidoId}`);
-      alert(" Partido eliminado de la cartelera.");
+      toast.success("Partido eliminado de la cartelera.");
       cargarPartidos();
     } catch (error: any) {
-      alert(error.response?.data?.message || "Error al eliminar");
+      toast.error(error.response?.data?.message || "Error al eliminar");
     }
+  };
+
+  const handleEliminarPartido = (partidoId: number) => {
+    toast.warning("¿Estás seguro de que deseas eliminar este partido?", {
+      id: `eliminar-${partidoId}`,
+      duration: Infinity,
+      position: "top-center",
+      action: {
+        label: "Sí, eliminar",
+        onClick: () => ejecutarEliminarPartido(partidoId),
+      },
+      cancel: {
+        label: "Cancelar",
+        onClick: () => toast.dismiss(`eliminar-${partidoId}`),
+      },
+    });
   };
 
   const formatearFecha = (fechaStr: string) => {

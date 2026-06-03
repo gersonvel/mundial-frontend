@@ -11,6 +11,7 @@ import {
   IoEyeOutline,
   IoFilterOutline,
 } from "react-icons/io5";
+import { toast } from "sonner";
 
 interface UsuarioRanking {
   username: string;
@@ -140,7 +141,10 @@ const Dashboard = () => {
       gLocal === "" ||
       gVisitante === ""
     ) {
-      alert("¡Por favor introduce un marcador completo antes de guardar!");
+      toast.warning(
+        "¡Por favor introduce un marcador completo antes de guardar!",
+      );
+      // alert("¡Por favor introduce un marcador completo antes de guardar!");
       return;
     }
 
@@ -151,7 +155,7 @@ const Dashboard = () => {
         golesVisitantePred: parseInt(gVisitante, 10),
       });
 
-      alert("¡Pronóstico registrado con éxito!");
+      toast.success("¡Pronóstico registrado con éxito!");
       setPartidosPronosticados((prev) => [...prev, partidoId]);
 
       const resPredicciones = await api.get<ResponseDTO<any[]>>(
@@ -159,7 +163,7 @@ const Dashboard = () => {
       );
       setMisPrediccionesRaw(resPredicciones.data.data);
     } catch (error: any) {
-      alert(
+      toast.error(
         error.response?.data?.message || "Error al procesar tu pronóstico.",
       );
     }
@@ -255,7 +259,7 @@ const Dashboard = () => {
       <main className="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-green-700 to-emerald-950 rounded-2xl p-6 md:p-8 text-white shadow-lg mb-8">
           <h1 className="text-3xl font-black md:text-4xl tracking-tight">
-            Estadio <span className="text-green-300">Quiniela Pro</span>
+            <span className="text-green-300">Quiniela Mundial 2026</span>
           </h1>
           <p className="text-green-100 text-sm md:text-base mt-2 max-w-xl">
             Calcula tus jugadas, asegura tus marcadores y escala puestos en la
@@ -340,7 +344,7 @@ const Dashboard = () => {
                           </div>
 
                           <div className="grid grid-cols-[1fr_auto_1fr] items-center my-2 gap-4">
-                            {/* 🏠 1. EQUIPO LOCAL (Empuja todo hacia la derecha, bandera al centro) */}
+                            {/* 1. EQUIPO LOCAL (Empuja todo hacia la derecha, bandera al centro) */}
                             <div className="flex items-center justify-end gap-3 min-w-0">
                               <div className="text-right min-w-0">
                                 <span

@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
 import { ProtectedRoute } from "./components/ProtectedRoute"; //   Importamos el guardián
 import Register from "./pages/Register";
+import { Toaster } from "sonner";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter
         future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
       >
+        <Toaster position="top-center" richColors closeButton />
         <Routes>
           {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
