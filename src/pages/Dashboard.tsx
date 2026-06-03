@@ -261,10 +261,10 @@ const Dashboard = () => {
           <h1 className="text-3xl font-black md:text-4xl tracking-tight">
             <span className="text-green-300">Quiniela Mundial 2026</span>
           </h1>
-          <p className="text-green-100 text-sm md:text-base mt-2 max-w-xl">
+          {/* <p className="text-green-100 text-sm md:text-base mt-2 max-w-xl">
             Calcula tus jugadas, asegura tus marcadores y escala puestos en la
             tabla general.
-          </p>
+          </p> */}
 
           <div className="flex flex-wrap gap-3 mt-6">
             <button
