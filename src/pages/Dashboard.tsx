@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import api from "../api/axios";
-import type { Partido, ResponseDTO } from "../types";
+import type { Partido, ResponseDTO, UsuarioRanking } from "../types";
 import {
   IoFootballOutline,
   IoCheckmarkCircleOutline,
@@ -10,13 +10,10 @@ import {
   IoListOutline,
   IoEyeOutline,
   IoFilterOutline,
+  IoStar,
+  IoShieldHalfOutline,
 } from "react-icons/io5";
 import { toast } from "sonner";
-
-interface UsuarioRanking {
-  username: string;
-  puntosTotales: number;
-}
 
 interface PrediccionHistorial {
   id?: number;
@@ -36,7 +33,7 @@ const Dashboard = () => {
   >([]);
 
   const [vistaActiva, setVistaActiva] = useState<
-    "partidos" | "ranking" | "mis_pronosticos"
+    "partidos" | "ranking" | "mis_pronosticos" | "criterio_desempate"
   >("partidos");
   const [pronosticoLocal, setPronosticoLocal] = useState<{
     [key: number]: string;
@@ -79,12 +76,22 @@ const Dashboard = () => {
       }
 
       // 3. Cargar Ranking Global
+      // try {
+      //   const resRanking =
+      //     await api.get<ResponseDTO<UsuarioRanking[]>>("/ranking");
+      //   if (activo) setRanking(resRanking.data.data);
+      // } catch (error) {
+      //   console.error("Error al cargar el ranking:", error);
+      // }
+
+      // 3. Cargar Ranking Global
       try {
         const resRanking =
-          await api.get<ResponseDTO<UsuarioRanking[]>>("/ranking");
+          await api.get<ResponseDTO<UsuarioRanking[]>>("/ranking/desempate");
+        console.log("aqui ", resRanking.data.data);
         if (activo) setRanking(resRanking.data.data);
       } catch (error) {
-        console.error("Error al cargar el ranking:", error);
+        console.error("Error al cargar el ranking con desempates:", error);
       }
 
       // 4. Cargar Historial de Predicciones de la Base de Datos
@@ -299,6 +306,18 @@ const Dashboard = () => {
             >
               <IoTrophyOutline className="w-4 h-4" />
               Tabla de Ranking
+            </button>
+
+            <button
+              onClick={() => setVistaActiva("criterio_desempate")}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
+                vistaActiva === "criterio_desempate"
+                  ? "bg-white text-emerald-950 shadow-md"
+                  : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
+              }`}
+            >
+              <IoShieldHalfOutline className="w-4 h-4" />
+              Información
             </button>
           </div>
         </div>
@@ -680,14 +699,22 @@ const Dashboard = () => {
               </div>
             )}
 
-            {/* --- VISTA 3: TABLA DE RANKING --- */}
+            {/* --- VISTA 3: TABLA DE RANKING OFICIAL CON CRITERIOS --- */}
             {vistaActiva === "ranking" && (
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center gap-2">
-                  <IoTrophyOutline className="text-yellow-500 h-5 w-5" />
-                  <h2 className="font-bold text-slate-800 text-lg">
-                    Tabla General de Posiciones
-                  </h2>
+                <div className="p-5 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <IoTrophyOutline className="text-yellow-500 h-5 w-5" />
+                    <div>
+                      <h2 className="font-bold text-slate-800 text-lg">
+                        Tabla General de Posiciones
+                      </h2>
+                      <p className="text-xs text-slate-400">
+                        A igualdad de puntos, clasifica quien tenga más aciertos
+                        de 5, luego 4, 3 y 1 punto respectivamente.
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
@@ -695,6 +722,9 @@ const Dashboard = () => {
                       <tr className="border-b border-slate-200 bg-slate-100/60 text-slate-500 text-xs font-bold uppercase tracking-wider">
                         <th className="py-4 px-6 text-center w-20">Posición</th>
                         <th className="py-4 px-6">Usuario</th>
+                        <th className="py-4 px-6 text-center">
+                          Desglose de Calidad (Desempate)
+                        </th>
                         <th className="py-4 px-6 text-right w-36">
                           Puntos Totales
                         </th>
@@ -713,6 +743,7 @@ const Dashboard = () => {
                             key={row.username}
                             className="hover:bg-slate-50/80 transition-colors"
                           >
+                            {/* Número de posición */}
                             <td className="py-4 px-6 font-bold text-center">
                               <span
                                 className={`inline-flex items-center justify-center h-7 w-7 rounded-full text-xs border font-black ${
@@ -724,11 +755,44 @@ const Dashboard = () => {
                                 {index + 1}
                               </span>
                             </td>
+
+                            {/* Nombre del Usuario */}
                             <td className="py-4 px-6 font-semibold text-slate-800">
                               @{row.username}
                             </td>
+
+                            <td className="py-4 px-6">
+                              <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                                <span
+                                  className="inline-flex items-center gap-0.5 bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Marcadores exactos"
+                                >
+                                  5p: <strong>{row.cincos ?? 0}</strong>
+                                </span>
+                                <span
+                                  className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Ganador + Goles un equipo"
+                                >
+                                  4p: <strong>{row.cuatros ?? 0}</strong>
+                                </span>
+                                <span
+                                  className="inline-flex items-center gap-0.5 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Solo ganador"
+                                >
+                                  3p: <strong>{row.tres ?? 0}</strong>
+                                </span>
+                                <span
+                                  className="inline-flex items-center gap-0.5 bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Solo goles un equipo"
+                                >
+                                  1p: <strong>{row.unos ?? 0}</strong>
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* Puntos de la fila */}
                             <td className="py-4 px-6 text-right font-black text-slate-900 text-base">
-                              <span className="bg-green-50 text-green-700 px-3 py-1 rounded-lg border border-green-100">
+                              <span className="bg-emerald-600 text-white px-3 py-1.5 rounded-xl border border-emerald-700 font-black shadow-sm">
                                 {row.puntosTotales} pts
                               </span>
                             </td>
@@ -737,6 +801,135 @@ const Dashboard = () => {
                       })}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {/* --- VISTA 4: CRITERIO DE DESEMPATE --- */}
+            {vistaActiva === "criterio_desempate" && (
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden animate-fade-in">
+                {/* Encabezado de la pestaña */}
+                <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center gap-2">
+                  <IoShieldHalfOutline className="text-yellow-500 h-5 w-5" />
+                  <h2 className="font-bold text-slate-800 text-lg">
+                    Información
+                  </h2>
+                </div>
+
+                {/* Contenido principal estandarizado */}
+                <div className="p-6 text-sm text-slate-600 space-y-6">
+                  {/* SECCIÓN 1: ASIGNACIÓN DE PUNTOS */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Asignación de puntos
+                    </h3>
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        <strong className="text-green-600">5 pts:</strong>{" "}
+                        Acierto al marcador final exacto.
+                      </li>
+                      <li>
+                        <strong className="text-blue-600">4 pts:</strong>{" "}
+                        Acierto al ganador y a los goles de alguno de los
+                        equipos.
+                      </li>
+                      <li>
+                        <strong className="text-amber-600">3 pts:</strong>{" "}
+                        Acierto únicamente al ganador del encuentro (tendencia).
+                      </li>
+                      <li>
+                        <strong className="text-slate-500">1 pts:</strong>{" "}
+                        Acierto únicamente a los goles de alguno de los equipos.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <hr className="border-slate-100" />
+
+                  {/* SECCIÓN 2: CRITERIOS DE DESEMPATE */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Criterios de Desempate
+                    </h3>
+                    <p className="font-medium text-slate-500">
+                      Si dos o más usuarios terminan empatados en puntos totales
+                      al finalizar la jornada, el sistema evaluará de forma
+                      automática la <strong>calidad de sus aciertos</strong> en
+                      el siguiente orden estricto hasta romper la igualdad:
+                    </p>
+
+                    <ol className="list-decimal pl-5 space-y-3 font-medium text-slate-700">
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Mayor precisión:
+                        </span>{" "}
+                        Quien tenga más marcadores exactos acertados
+                        <strong className="text-green-600"> 5 puntos</strong>
+                      </li>
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Segundo filtro:
+                        </span>{" "}
+                        Si continúan igualados, clasificará quien tenga más
+                        aciertos de{" "}
+                        <strong className="text-blue-600">4 puntos</strong>.
+                      </li>
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Tercer filtro:
+                        </span>{" "}
+                        De persistir el empate, se contará quien tenga más
+                        tendencias acertadas de{" "}
+                        <strong className="text-amber-600">3 puntos</strong>.
+                      </li>
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Cuarto filtro:
+                        </span>{" "}
+                        Si la igualdad se mantiene, se tomará en cuenta quien
+                        sume más aciertos de{" "}
+                        <strong className="text-slate-500">1 punto</strong>.
+                      </li>
+                    </ol>
+                  </div>
+
+                  <hr className="border-slate-100" />
+                  {/* SECCIÓN 3: Premio */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Premios
+                    </h3>
+
+                    <ol className="list-decimal pl-5 space-y-3 font-medium text-slate-700">
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Primer lugar:
+                        </span>{" "}
+                        Será acreedor al 60% del monto total del premio.
+                      </li>
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Segundo lugar:
+                        </span>{" "}
+                        Será acreedor al 25% del monto total del premio.
+                      </li>
+                      <li>
+                        <span className="font-bold text-slate-900">
+                          Tercer lugar:
+                        </span>{" "}
+                        Será acreedor al 15% del monto total del premio.
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* NOTA DE CIERRE JUSTO */}
+                  <div className="pt-2">
+                    <p className="text-amber-700 bg-amber-50/70 border border-amber-200 rounded-xl p-4 font-semibold leading-relaxed">
+                      Nota: En el caso extremo de que persista un empate
+                      absoluto en todos los filtros anteriores, se declarará un
+                      empate técnico oficial entre los usuarios involucrados.
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

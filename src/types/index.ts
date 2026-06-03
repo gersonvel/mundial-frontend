@@ -62,3 +62,12 @@ export interface AuthResponse {
   message?: string;
   success?: boolean;
 }
+
+export interface UsuarioRanking {
+  username: string;
+  puntosTotales: number;
+  cincos?: number;
+  cuatros?: number;
+  tres?: number;
+  unos?: number;
+}
