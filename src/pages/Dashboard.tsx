@@ -865,8 +865,8 @@ const Dashboard = () => {
                       </li>
                       <li>
                         <strong className="text-amber-600">3 pts:</strong>{" "}
-                        Acierto al ganador del encuentro (sin en importar el
-                        marcador).
+                        Acierto al ganador ó empate del encuentro (sin en
+                        importar el marcador).
                       </li>
                       <li>
                         <strong className="text-blue-600">4 pts:</strong>{" "}
