@@ -10,8 +10,7 @@ import {
   IoListOutline,
   IoEyeOutline,
   IoFilterOutline,
-  IoStar,
-  IoShieldHalfOutline,
+  IoNewspaperOutline,
 } from "react-icons/io5";
 import { toast } from "sonner";
 
@@ -305,7 +304,7 @@ const Dashboard = () => {
               }`}
             >
               <IoTrophyOutline className="w-4 h-4" />
-              Tabla de Ranking
+              Posiciones
             </button>
 
             <button
@@ -316,8 +315,8 @@ const Dashboard = () => {
                   : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
               }`}
             >
-              <IoShieldHalfOutline className="w-4 h-4" />
-              Información
+              <IoNewspaperOutline className="w-4 h-4" />
+              Reglas
             </button>
           </div>
         </div>
@@ -333,7 +332,7 @@ const Dashboard = () => {
               <div className="space-y-6">
                 <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                   <IoFootballOutline className="text-green-600 h-6 w-6" />
-                  Partidos
+                  Próximos partidos
                 </h2>
                 {partidosActivosValidos.length === 0 ? (
                   <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400 shadow-sm">
@@ -354,7 +353,10 @@ const Dashboard = () => {
                           {/* Encabezado: Fase y Fecha */}
                           <div className="flex items-center justify-between mb-5">
                             <span className="text-[11px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-0.5 rounded-md tracking-wider">
-                              {partido.fase.replace("_", " ")}
+                              {partido.fase.replace("_", " ")} -
+                              {partido.grupo
+                                ? partido.grupo.replace("GRUPO_", "Grupo ")
+                                : "Eliminatorias"}
                             </span>
                             <div className="text-xs text-slate-400 flex items-center gap-1 font-medium">
                               <IoTimeOutline className="w-4 h-4 text-slate-400" />
@@ -510,7 +512,7 @@ const Dashboard = () => {
                 <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-2 text-slate-700 font-bold text-sm">
                     <IoFilterOutline className="text-green-600 w-5 h-5" />
-                    <span>Filtrar Apuestas:</span>
+                    <span>Filtrar resultados:</span>
                   </div>
 
                   <div className="flex flex-1 flex-col sm:flex-row gap-3 w-full sm:w-auto sm:justify-end">
@@ -589,7 +591,10 @@ const Dashboard = () => {
 
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-[10px] font-black uppercase bg-slate-100 text-slate-500 border border-slate-200 px-2 py-0.5 rounded-md">
-                              {part.fase.replace("_", " ")}
+                              {part.fase.replace("_", " ")} -{" "}
+                              {part.grupo
+                                ? part.grupo.replace("GRUPO_", "Grupo ")
+                                : "Eliminatorias"}
                             </span>
                             <span className="text-xs text-slate-400 font-medium">
                               {formatearFecha(part.fechaHora)}
@@ -710,8 +715,8 @@ const Dashboard = () => {
                         Tabla General de Posiciones
                       </h2>
                       <p className="text-xs text-slate-400">
-                        A igualdad de puntos, clasifica quien tenga más aciertos
-                        de 5, luego 4, 3 y 1 punto respectivamente.
+                        A igualdad de puntos, prevalece quien tenga más calidad
+                        de aciertos, 5, 4 y 3 puntos respectivamente.
                       </p>
                     </div>
                   </div>
@@ -723,7 +728,7 @@ const Dashboard = () => {
                         <th className="py-4 px-6 text-center w-20">Posición</th>
                         <th className="py-4 px-6">Usuario</th>
                         <th className="py-4 px-6 text-center">
-                          Desglose de Calidad (Desempate)
+                          Desglose de Aciertos (Calidad de desempate)
                         </th>
                         <th className="py-4 px-6 text-right w-36">
                           Puntos Totales
@@ -758,7 +763,7 @@ const Dashboard = () => {
 
                             {/* Nombre del Usuario */}
                             <td className="py-4 px-6 font-semibold text-slate-800">
-                              @{row.username}
+                              {row.username}
                             </td>
 
                             <td className="py-4 px-6">
@@ -810,10 +815,8 @@ const Dashboard = () => {
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden animate-fade-in">
                 {/* Encabezado de la pestaña */}
                 <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center gap-2">
-                  <IoShieldHalfOutline className="text-yellow-500 h-5 w-5" />
-                  <h2 className="font-bold text-slate-800 text-lg">
-                    Información
-                  </h2>
+                  <IoNewspaperOutline className="text-yellow-500 h-5 w-5" />
+                  <h2 className="font-bold text-slate-800 text-lg">Reglas</h2>
                 </div>
 
                 {/* Contenido principal estandarizado */}
@@ -829,6 +832,25 @@ const Dashboard = () => {
                       y basada en el desempeño durante el tiempo reglamentario y
                       extra.
                     </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Registro de pronósticos
+                    </h3>
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        Debido a las limitaciones para ingresar a la plataforma,
+                        el registro de pronósticos deberá realizarse de lunes a
+                        viernes, incluidos los partidos de fin de semana (sábado
+                        y domingo).
+                      </li>
+                      <li>
+                        De no registrarse el pronóstico antes del inicio del
+                        encuentro correspondiente, se asignará automáticamente
+                        un puntaje de 0 puntos, sin excepciones.
+                      </li>
+                    </ul>
                   </div>
 
                   {/* SECCIÓN 1: ASIGNACIÓN DE PUNTOS */}
@@ -883,27 +905,19 @@ const Dashboard = () => {
                       </li>
                       <li>
                         <span className="font-bold text-slate-900">
-                          Segundo filtro:
+                          Segundo criterio:
                         </span>{" "}
-                        Si continúan igualados, clasificará quien tenga más
+                        Si continúan igualados, prevalecerá quien tenga más
                         aciertos de{" "}
                         <strong className="text-blue-600">4 puntos</strong>.
                       </li>
                       <li>
                         <span className="font-bold text-slate-900">
-                          Tercer filtro:
+                          Tercer criterio:
                         </span>{" "}
-                        De persistir el empate, se contará quien tenga más
-                        tendencias acertadas de{" "}
+                        De persistir el empate, se considerará quien tenga más
+                        aciertos de{" "}
                         <strong className="text-amber-600">3 puntos</strong>.
-                      </li>
-                      <li>
-                        <span className="font-bold text-slate-900">
-                          Cuarto filtro:
-                        </span>{" "}
-                        Si la igualdad se mantiene, se tomará en cuenta quien
-                        sume más aciertos de{" "}
-                        <strong className="text-slate-500">1 punto</strong>.
                       </li>
                     </ul>
                   </div>
@@ -920,19 +934,19 @@ const Dashboard = () => {
                         <span className="font-bold text-slate-900">
                           Primer lugar:
                         </span>{" "}
-                        Será acreedor al 60% del monto total del premio.
+                        60% de la bolsa.
                       </li>
                       <li>
                         <span className="font-bold text-slate-900">
                           Segundo lugar:
                         </span>{" "}
-                        Será acreedor al 25% del monto total del premio.
+                        25% de la bolsa.
                       </li>
                       <li>
                         <span className="font-bold text-slate-900">
                           Tercer lugar:
                         </span>{" "}
-                        Será acreedor al 15% del monto total del premio.
+                        15% de la bolsa.
                       </li>
                     </ul>
                   </div>
@@ -941,8 +955,10 @@ const Dashboard = () => {
                   <div className="pt-2">
                     <p className="text-amber-700 bg-amber-50/70 border border-amber-200 rounded-xl p-4 font-semibold leading-relaxed">
                       Nota: En el caso extremo de que persista un empate
-                      absoluto en todos los filtros anteriores, se declarará un
-                      empate técnico oficial entre los usuarios involucrados.
+                      absoluto en todos los criterios anteriores, se declarará
+                      un empate técnico oficial, y los premios correspondientes
+                      se sumarán y se dividirán equitativamente entre los
+                      usuarios involucrados.
                     </p>
                   </div>
                 </div>
