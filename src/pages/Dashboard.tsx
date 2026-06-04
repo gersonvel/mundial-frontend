@@ -818,6 +818,19 @@ const Dashboard = () => {
 
                 {/* Contenido principal estandarizado */}
                 <div className="p-6 text-sm text-slate-600 space-y-6">
+                  <div className="pt-2">
+                    <p className="text-amber-700 bg-amber-50/70 border border-amber-200 rounded-xl p-4 font-semibold leading-relaxed">
+                      Nota: La quiniela solo contempla los marcadores finales de
+                      los encuentros en el tiempo regular (90 min) y en tal
+                      caso, en el tiempo extra (+ 30 min). <br />
+                      No se considerarán para el conteo de puntos los resultados
+                      que se definan por penales, ni los goles anotados durante
+                      la tanda de penales. Esto garantiza una competencia justa
+                      y basada en el desempeño durante el tiempo reglamentario y
+                      extra.
+                    </p>
+                  </div>
+
                   {/* SECCIÓN 1: ASIGNACIÓN DE PUNTOS */}
                   <div className="space-y-3">
                     <h3 className="font-bold text-slate-800 text-base">
@@ -825,21 +838,22 @@ const Dashboard = () => {
                     </h3>
                     <ul className="pl-5 list-disc space-y-2 font-medium">
                       <li>
-                        <strong className="text-green-600">5 pts:</strong>{" "}
-                        Acierto al marcador final exacto.
-                      </li>
-                      <li>
-                        <strong className="text-blue-600">4 pts:</strong>{" "}
-                        Acierto al ganador y a los goles de alguno de los
-                        equipos.
+                        <strong className="text-slate-500">1 pt:</strong>{" "}
+                        Acierto al marcador únicamente de un equipo.
                       </li>
                       <li>
                         <strong className="text-amber-600">3 pts:</strong>{" "}
-                        Acierto únicamente al ganador del encuentro (tendencia).
+                        Acierto al ganador del encuentro (sin en importar el
+                        marcador).
                       </li>
                       <li>
-                        <strong className="text-slate-500">1 pts:</strong>{" "}
-                        Acierto únicamente a los goles de alguno de los equipos.
+                        <strong className="text-blue-600">4 pts:</strong>{" "}
+                        Acierto al ganador y al marcador de un equipo (3 pts + 1
+                        pt).
+                      </li>
+                      <li>
+                        <strong className="text-green-600">5 pts:</strong>{" "}
+                        Acierto al marcador exacto.
                       </li>
                     </ul>
                   </div>
@@ -852,13 +866,14 @@ const Dashboard = () => {
                       Criterios de Desempate
                     </h3>
                     <p className="font-medium text-slate-500">
-                      Si dos o más usuarios terminan empatados en puntos totales
-                      al finalizar la jornada, el sistema evaluará de forma
-                      automática la <strong>calidad de sus aciertos</strong> en
-                      el siguiente orden estricto hasta romper la igualdad:
+                      Si dos o más jugadores terminan empatados en puntos
+                      totales al finalizar el torneo, el sistema evaluará de
+                      forma automática la{" "}
+                      <strong>calidad de sus aciertos</strong> en el siguiente
+                      orden estricto hasta romper la igualdad:
                     </p>
 
-                    <ol className="list-decimal pl-5 space-y-3 font-medium text-slate-700">
+                    <ul className=" list-disc pl-5 space-y-3 font-medium text-slate-700">
                       <li>
                         <span className="font-bold text-slate-900">
                           Mayor precisión:
@@ -890,7 +905,7 @@ const Dashboard = () => {
                         sume más aciertos de{" "}
                         <strong className="text-slate-500">1 punto</strong>.
                       </li>
-                    </ol>
+                    </ul>
                   </div>
 
                   <hr className="border-slate-100" />
@@ -900,7 +915,7 @@ const Dashboard = () => {
                       Premios
                     </h3>
 
-                    <ol className="list-decimal pl-5 space-y-3 font-medium text-slate-700">
+                    <ul className="list-disc pl-5 space-y-3 font-medium text-slate-700">
                       <li>
                         <span className="font-bold text-slate-900">
                           Primer lugar:
@@ -919,7 +934,7 @@ const Dashboard = () => {
                         </span>{" "}
                         Será acreedor al 15% del monto total del premio.
                       </li>
-                    </ol>
+                    </ul>
                   </div>
 
                   {/* NOTA DE CIERRE JUSTO */}
