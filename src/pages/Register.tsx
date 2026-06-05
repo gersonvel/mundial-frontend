@@ -131,7 +131,7 @@ const Register = () => {
             disabled={loading}
             className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/10 cursor-pointer text-sm disabled:opacity-50 mt-2"
           >
-            {loading ? "Registrando..." : "Registrarme Ahora"}
+            {loading ? "Registrando..." : "Registrarme"}
           </button>
         </form>
 
