@@ -1,8 +1,18 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://10.240.236.1677:8080/api',
-});
+
+const localUrl = import.meta.env.VITE_API_BASE_URL_LOCAL;
+const extUrl = import.meta.env.VITE_API_BASE_URL_EXT;
+
+const isLocal = window.location.hostname === '10.240.236.167';
+
+  const api = axios.create({
+    baseURL: isLocal ? localUrl : extUrl,
+  });
+
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://10.240.236.1677:8080/api',
+// });
 
 api.interceptors.request.use(
   (config) => {

@@ -87,7 +87,6 @@ const Dashboard = () => {
       try {
         const resRanking =
           await api.get<ResponseDTO<UsuarioRanking[]>>("/ranking/desempate");
-        console.log("aqui ", resRanking.data.data);
         if (activo) setRanking(resRanking.data.data);
       } catch (error) {
         console.error("Error al cargar el ranking con desempates:", error);
