@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
-import { ProtectedRoute } from "./components/ProtectedRoute"; //   Importamos el guardián
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import { Toaster } from "sonner";
 
@@ -19,12 +19,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* CAPA PROTEGIDA 1: Para cualquier usuario logueado (USER o ADMIN) */}
+          {/*Para cualquier usuario logueado (USER o ADMIN) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
-          {/* CAPA PROTEGIDA 2: Exclusiva para administradores */}
+          {/* Exclusiva para administradores */}
           <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
             <Route path="/admin" element={<AdminPanel />} />
           </Route>

@@ -17,12 +17,12 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     );
   }
 
-  // 🔒 CONTROL 1: Si no está logueado, directo al Login
+  //CONTROL 1: Si no está logueado, directo al Login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // 🔒 CONTROL 2: Si la ruta exige roles específicos (como ser Admin) y el usuario no lo tiene, lo rebotamos
+  // CONTROL 2: Si la ruta exige roles específicos (como ser Admin) y el usuario no lo tiene, lo rebotamos
   if (allowedRoles && !allowedRoles.some((rol) => user.roles.includes(rol))) {
     // Si un usuario común intenta entrar a /admin, lo mandamos a su dashboard normal
     return <Navigate to="/dashboard" replace />;

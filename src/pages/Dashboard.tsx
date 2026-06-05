@@ -63,7 +63,7 @@ const Dashboard = () => {
         console.error("Error al recuperar partidos activos:", error);
       }
 
-      // 2.   NUEVO: Cargar ABSOLUTAMENTE TODOS los partidos (Para la pestaña de historial)
+      // 2.   Cargar ABSOLUTAMENTE TODOS los partidos (Para la pestaña de historial)
       try {
         const resTodos = await api.get<ResponseDTO<Partido[]>>("/partidos");
         if (activo) setTodosLosPartidos(resTodos.data.data);
@@ -175,8 +175,6 @@ const Dashboard = () => {
   };
 
   const formatearFecha = (fechaStr: string) => {
-    // Si la fecha viene de la BD como '2026-06-11T13:00:00' o similar,
-    // nos aseguramos de reemplazar la 'Z' si existe para que el navegador la tome en hora local pura
     const fechaLimpia = fechaStr.includes("Z")
       ? fechaStr.replace("Z", "")
       : fechaStr;
@@ -187,32 +185,27 @@ const Dashboard = () => {
       month: "short",
       hour: "2-digit",
       minute: "2-digit",
-      hour12: true, // Muestra 01:00 PM en lugar de 13:00
+      hour12: true,
     });
   };
 
-  //  LÓGICA MAESTRA OPTIMIZADA (OPCIÓN 2): Cruce sobre todos los partidos de la BD
   const obtenerHistorialCompleto = (): PrediccionHistorial[] => {
     const ahora = new Date();
     const historialUnificado: PrediccionHistorial[] = [...misPrediccionesRaw];
 
-    // Recorremos el universo completo de partidos devuelto por la opción 2
     todosLosPartidos.forEach((partido) => {
-      // AQUÍ ENTRA LA LIMPIEZA DE ZONA HORARIA
       const fechaLimpia = partido.fechaHora.includes("Z")
         ? partido.fechaHora.replace("Z", "")
         : partido.fechaHora;
 
       const fechaPartido = new Date(fechaLimpia);
 
-      // Un partido califica para el historial si ya pasó de su hora o si su estado es JUGADO
       const yaExpiro = fechaPartido < ahora || partido.estado === "JUGADO";
 
       const yaTieneApuesta = misPrediccionesRaw.some(
         (pred) => pred.partido?.id === partido.id,
       );
 
-      // Si el partido ya caducó/terminó y el usuario no apostó, le creamos su tarjeta virtual vacía
       if (yaExpiro && !yaTieneApuesta) {
         historialUnificado.push({
           id: Math.random(),
@@ -224,7 +217,6 @@ const Dashboard = () => {
       }
     });
 
-    //   OPCIONAL: También puedes limpiar las fechas en el ordenamiento final para que sea exacto
     return historialUnificado.sort((a, b) => {
       const fechaA = a.partido.fechaHora.includes("Z")
         ? a.partido.fechaHora.replace("Z", "")
@@ -247,7 +239,6 @@ const Dashboard = () => {
     return cumpleFase && cumpleGrupo;
   });
 
-  // Filtrado estricto para la primera pestaña (SÓLO lo que tenga fecha futura y siga PENDIENTE)
   const partidosActivosValidos = partidosActivos.filter((partido) => {
     const fechaLimpia = partido.fechaHora.includes("Z")
       ? partido.fechaHora.replace("Z", "")
@@ -364,7 +355,6 @@ const Dashboard = () => {
                           </div>
 
                           <div className="grid grid-cols-[1fr_auto_1fr] items-center my-2 gap-4">
-                            {/* 1. EQUIPO LOCAL (Empuja todo hacia la derecha, bandera al centro) */}
                             <div className="flex items-center justify-end gap-3 min-w-0">
                               <div className="text-right min-w-0">
                                 <span
@@ -384,7 +374,6 @@ const Dashboard = () => {
                               />
                             </div>
 
-                            {/* 🔢 2. CONTENEDOR CENTRAL (Marcadores compactos) */}
                             <div className="flex items-center justify-center gap-2 px-1">
                               <input
                                 type="number"

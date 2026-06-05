@@ -50,7 +50,6 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 selection:bg-emerald-500 selection:text-slate-950">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-        {/* Decoración superior estética */}
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
 
         {/* Encabezado */}
@@ -135,7 +134,6 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Enlace de navegación */}
         <div className="mt-6 text-center text-xs font-medium text-slate-400">
           ¿Ya tienes cuenta?{" "}
           <Link

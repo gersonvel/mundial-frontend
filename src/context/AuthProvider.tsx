@@ -5,7 +5,6 @@ import { AuthContext } from "./AuthContext";
 import type { UserState } from "../types";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  //   Nace con los datos cargados al instante, sin retrasos
   const [user, setUser] = useState<UserState | null>(() => {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
@@ -43,7 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const isAdmin = () => user?.roles.includes("ROLE_ADMIN") ?? false;
 
-  // Eliminamos la condición '!loading' y renderizamos directo
   return (
     <AuthContext.Provider
       value={{ user, login, logout, isAdmin, loading: false }}

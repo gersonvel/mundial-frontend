@@ -20,7 +20,6 @@ const AdminPanel = () => {
     [key: number]: string;
   }>({});
 
-  //   NUEVO ESTADO: Guarda qué equipo ganó en penales por cada partidoId
   const [ganadoresPenales, setGanadoresPenales] = useState<{
     [key: number]: string;
   }>({});
@@ -130,7 +129,7 @@ const AdminPanel = () => {
         // );
         return;
       }
-      ganadorPenalesDto = seleccion; // Mandará "LOCAL" o "VISITANTE" de forma limpia
+      ganadorPenalesDto = seleccion;
     }
 
     try {

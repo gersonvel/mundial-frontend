@@ -40,10 +40,8 @@ const Login = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-800 to-emerald-950 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-2xl">
-        {/* Encabezado con Icono */}
         <div className="text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
-            {/* Animación sutil de rotación para el balón */}
             <IoFootball
               className="h-10 w-10 animate-spin"
               style={{ animationDuration: "6s" }}
