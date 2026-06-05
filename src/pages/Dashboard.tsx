@@ -258,14 +258,15 @@ const Dashboard = () => {
             <span className="text-green-300">Quiniela Mundial 2026</span>
           </h1>
           {/* <p className="text-green-100 text-sm md:text-base mt-2 max-w-xl">
-            Calcula tus jugadas, asegura tus marcadores y escala puestos en la
-            tabla general.
-          </p> */}
+              Calcula tus jugadas, asegura tus marcadores y escala puestos en la
+              tabla general.
+            </p> */}
 
-          <div className="flex flex-wrap gap-3 mt-6">
+          {/* CAMBIO AQUÍ: flex-col en móvil, fila con wrap en pantallas medianas (md) */}
+          <div className="flex flex-col md:flex-row md:flex-wrap gap-3 mt-6">
             <button
               onClick={() => setVistaActiva("partidos")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
+              className={`w-full md:w-auto flex items-center justify-center md:justify-start gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                 vistaActiva === "partidos"
                   ? "bg-white text-emerald-950 shadow-md"
                   : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
@@ -274,9 +275,10 @@ const Dashboard = () => {
               <IoListOutline className="w-4 h-4" />
               Ver Partidos
             </button>
+
             <button
               onClick={() => setVistaActiva("mis_pronosticos")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
+              className={`w-full md:w-auto flex items-center justify-center md:justify-start gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                 vistaActiva === "mis_pronosticos"
                   ? "bg-white text-emerald-950 shadow-md"
                   : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
@@ -285,9 +287,10 @@ const Dashboard = () => {
               <IoEyeOutline className="w-4 h-4" />
               Mis Pronósticos
             </button>
+
             <button
               onClick={() => setVistaActiva("ranking")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
+              className={`w-full md:w-auto flex items-center justify-center md:justify-start gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                 vistaActiva === "ranking"
                   ? "bg-white text-emerald-950 shadow-md"
                   : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
@@ -299,7 +302,7 @@ const Dashboard = () => {
 
             <button
               onClick={() => setVistaActiva("criterio_desempate")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
+              className={`w-full md:w-auto flex items-center justify-center md:justify-start gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                 vistaActiva === "criterio_desempate"
                   ? "bg-white text-emerald-950 shadow-md"
                   : "bg-green-800/40 text-green-100 hover:bg-green-800/60"
@@ -338,64 +341,59 @@ const Dashboard = () => {
                       return (
                         <div
                           key={partido.id}
-                          className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-300"
+                          className="bg-white border border-slate-200 rounded-2xl shadow-sm p-3 sm:p-5 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-300"
                         >
                           {/* Encabezado: Fase y Fecha */}
-                          <div className="flex items-center justify-between mb-5">
-                            <span className="text-[11px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-0.5 rounded-md tracking-wider">
-                              {partido.fase.replace("_", " ")} -
+                          <div className="flex items-center justify-between mb-4 sm:mb-5 gap-2">
+                            <span className="text-[10px] sm:text-[11px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-md tracking-wider truncate max-w-[180px] sm:max-w-none">
+                              {partido.fase.replace("_", " ")} -{" "}
                               {partido.grupo
                                 ? partido.grupo.replace("GRUPO_", "Grupo ")
                                 : "Eliminatorias"}
                             </span>
-                            <div className="text-xs text-slate-400 flex items-center gap-1 font-medium">
-                              <IoTimeOutline className="w-4 h-4 text-slate-400" />
+                            <div className="text-[11px] sm:text-xs text-slate-400 flex items-center gap-1 font-medium flex-shrink-0">
+                              <IoTimeOutline className="w-3.5 h-3.5 text-slate-400" />
                               {formatearFecha(partido.fechaHora)}
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-[1fr_auto_1fr] items-center my-2 gap-4">
-                            <div className="flex items-center justify-end gap-3 min-w-0">
-                              <div className="text-right min-w-0">
+                          <div className="grid grid-cols-[1fr_auto_1fr] items-center my-1 gap-1 sm:gap-4 min-w-0">
+                            {/* EQUIPO LOCAL */}
+                            <div className="flex items-center justify-end gap-1.5 sm:gap-3 min-w-0">
+                              <div className="text-right min-w-0 flex-1">
                                 <span
-                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  className="font-black text-slate-800 text-xs sm:text-sm md:text-base block truncate"
                                   title={partido.equipoLocal}
                                 >
                                   {partido.equipoLocal}
                                 </span>
-                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
                                   Local
                                 </span>
                               </div>
                               <img
                                 src={`/banderas/${partido.banderaLocal}`}
                                 alt={partido.equipoLocal}
-                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                                className="w-7 h-5 sm:w-9 sm:h-6 object-cover rounded-sm sm:rounded-md shadow-sm border border-slate-200 flex-shrink-0"
                               />
                             </div>
 
-                            <div className="flex items-center justify-center gap-2 px-1">
+                            {/* INPUTS DE MARCADOR */}
+                            <div className="flex items-center justify-center gap-1 sm:gap-2 px-1 flex-shrink-0">
                               <input
                                 type="number"
                                 min="0"
                                 step="1"
                                 placeholder="-"
                                 disabled={yaPronosticado}
-                                className={`w-11 h-11 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
+                                className={`w-9 h-9 sm:w-11 sm:h-11 border rounded-lg sm:rounded-xl text-center text-base sm:text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
                                   yaPronosticado
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
                                     : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
                                 onKeyDown={(e) => {
-                                  if (
-                                    e.key === "." ||
-                                    e.key === "," ||
-                                    e.key === "e" ||
-                                    e.key === "E" ||
-                                    e.key === "-"
-                                  ) {
+                                  if (["-", "e", "E", ",", "."].includes(e.key))
                                     e.preventDefault();
-                                  }
                                 }}
                                 value={pronosticoLocal[partido.id] ?? ""}
                                 onChange={(e) => {
@@ -409,29 +407,24 @@ const Dashboard = () => {
                                   });
                                 }}
                               />
-                              <span className="text-slate-300 font-black text-xs uppercase px-0.5">
+
+                              <span className="text-slate-300 font-black text-[10px] sm:text-xs uppercase px-0.5">
                                 vs
                               </span>
+
                               <input
                                 type="number"
                                 min="0"
                                 placeholder="-"
                                 disabled={yaPronosticado}
-                                className={`w-11 h-11 border rounded-xl text-center text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
+                                className={`w-9 h-9 sm:w-11 sm:h-11 border rounded-lg sm:rounded-xl text-center text-base sm:text-lg font-black text-slate-800 focus:outline-none focus:border-green-600 transition-all shadow-inner ${
                                   yaPronosticado
                                     ? "bg-slate-100 border-slate-200 text-slate-400"
                                     : "bg-slate-50 border-slate-300 hover:border-slate-400"
                                 }`}
                                 onKeyDown={(e) => {
-                                  if (
-                                    e.key === "." ||
-                                    e.key === "," ||
-                                    e.key === "e" ||
-                                    e.key === "E" ||
-                                    e.key === "-"
-                                  ) {
+                                  if (["-", "e", "E", ",", "."].includes(e.key))
                                     e.preventDefault();
-                                  }
                                 }}
                                 value={pronosticoVisitante[partido.id] ?? ""}
                                 onChange={(e) => {
@@ -447,20 +440,21 @@ const Dashboard = () => {
                               />
                             </div>
 
-                            <div className="flex items-center justify-start gap-3 min-w-0">
+                            {/* EQUIPO VISITANTE */}
+                            <div className="flex items-center justify-start gap-1.5 sm:gap-3 min-w-0">
                               <img
                                 src={`/banderas/${partido.banderaVisitante}`}
                                 alt={partido.equipoVisitante}
-                                className="w-9 h-6 object-cover rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                                className="w-7 h-5 sm:w-9 sm:h-6 object-cover rounded-sm sm:rounded-md shadow-sm border border-slate-200 flex-shrink-0"
                               />
-                              <div className="text-left min-w-0">
+                              <div className="text-left min-w-0 flex-1">
                                 <span
-                                  className="font-black text-slate-800 text-sm md:text-base block truncate"
+                                  className="font-black text-slate-800 text-xs sm:text-sm md:text-base block truncate"
                                   title={partido.equipoVisitante}
                                 >
                                   {partido.equipoVisitante}
                                 </span>
-                                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                                <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
                                   Visitante
                                 </span>
                               </div>
@@ -468,9 +462,9 @@ const Dashboard = () => {
                           </div>
 
                           {/* Botón de Acción */}
-                          <div className="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+                          <div className="mt-4 sm:mt-5 pt-3 border-t border-slate-100 flex justify-end">
                             {yaPronosticado ? (
-                              <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50/60 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
+                              <div className="w-full sm:w-auto justify-center flex items-center gap-1.5 text-emerald-600 bg-emerald-50/60 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
                                 <IoCheckmarkCircleOutline className="w-4 h-4" />
                                 Pronóstico Enviado
                               </div>
@@ -479,7 +473,7 @@ const Dashboard = () => {
                                 onClick={() =>
                                   handleGuardarPronostico(partido.id)
                                 }
-                                className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md cursor-pointer"
+                                className="w-full sm:w-auto justify-center flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md cursor-pointer"
                               >
                                 <IoCheckmarkCircleOutline className="w-4 h-4" />
                                 Enviar Pronóstico
@@ -697,7 +691,7 @@ const Dashboard = () => {
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                 <div className="p-5 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <IoTrophyOutline className="text-yellow-500 h-5 w-5" />
+                    <IoTrophyOutline className="text-yellow-500 h-5 w-5 flex-shrink-0" />
                     <div>
                       <h2 className="font-bold text-slate-800 text-lg">
                         Tabla General de Posiciones
@@ -709,16 +703,21 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+
+                {/* Se añade w-full y overflow-x-auto para controlar pantallas pequeñas */}
+                <div className="overflow-x-auto w-full">
+                  {/* min-w-[550px] asegura que en pantallas muy chicas la tabla no se aplaste, sino que permita un scroll horizontal suave */}
+                  <table className="w-full text-left border-collapse min-w-[550px] sm:min-w-none">
                     <thead>
                       <tr className="border-b border-slate-200 bg-slate-100/60 text-slate-500 text-xs font-bold uppercase tracking-wider">
-                        <th className="py-4 px-6 text-center w-20">Posición</th>
-                        <th className="py-4 px-6">Usuario</th>
-                        <th className="py-4 px-6 text-center">
+                        <th className="py-4 px-4 sm:px-6 text-center w-20">
+                          Posición
+                        </th>
+                        <th className="py-4 px-4 sm:px-6">Usuario</th>
+                        <th className="py-4 px-4 sm:px-6 text-center">
                           Desglose de Aciertos (Calidad de desempate)
                         </th>
-                        <th className="py-4 px-6 text-right w-36">
+                        <th className="py-4 px-4 sm:px-6 text-center w-36">
                           Puntos Totales
                         </th>
                       </tr>
@@ -737,7 +736,7 @@ const Dashboard = () => {
                             className="hover:bg-slate-50/80 transition-colors"
                           >
                             {/* Número de posición */}
-                            <td className="py-4 px-6 font-bold text-center">
+                            <td className="py-4 px-4 sm:px-6 font-bold text-center">
                               <span
                                 className={`inline-flex items-center justify-center h-7 w-7 rounded-full text-xs border font-black ${
                                   esPodio
@@ -750,11 +749,12 @@ const Dashboard = () => {
                             </td>
 
                             {/* Nombre del Usuario */}
-                            <td className="py-4 px-6 font-semibold text-slate-800">
+                            <td className="py-4 px-4 sm:px-6 font-semibold text-slate-800">
                               {row.username}
                             </td>
 
-                            <td className="py-4 px-6">
+                            {/* Desglose de Aciertos */}
+                            <td className="py-4 px-4 sm:px-6">
                               <div className="flex items-center justify-center gap-1.5 flex-wrap">
                                 <span
                                   className="inline-flex items-center gap-0.5 bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
@@ -783,9 +783,9 @@ const Dashboard = () => {
                               </div>
                             </td>
 
-                            {/* Puntos de la fila */}
-                            <td className="py-4 px-6 text-right font-black text-slate-900 text-base">
-                              <span className="bg-emerald-600 text-white px-3 py-1.5 rounded-xl border border-emerald-700 font-black shadow-sm">
+                            {/* TU BOTÓN VERDE CORREGIDO Y CENTRADO */}
+                            <td className="py-4 px-4 sm:px-6 text-center font-black text-slate-900 text-base whitespace-nowrap">
+                              <span className="inline-flex items-center justify-center bg-emerald-600 text-white px-3 py-1.5 rounded-xl border border-emerald-700 font-black shadow-sm select-none">
                                 {row.puntosTotales} pts
                               </span>
                             </td>

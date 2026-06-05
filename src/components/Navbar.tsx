@@ -29,9 +29,9 @@ const Navbar = () => {
 
         {/* Info de Usuario y Cierre de Sesión */}
         <div className="flex items-center space-x-4">
-          <div className="text-right hidden sm:block">
+          <div className="text-right">
             <p className="text-sm font-semibold text-slate-200">
-              @{user?.username}
+              {user?.username}
             </p>
             <p className="text-xs text-emerald-400 font-medium">
               {user?.roles.includes("ROLE_ADMIN") ? "Administrador" : "Jugador"}
@@ -39,7 +39,7 @@ const Navbar = () => {
           </div>
 
           {/* Línea divisoria */}
-          <div className="h-8 w-px bg-slate-700 hidden sm:block"></div>
+          <div className="h-8 w-px bg-slate-700"></div>
 
           {/* Botón de Cerrar Sesión Estilizado */}
           <button
