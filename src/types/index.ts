@@ -18,6 +18,7 @@ export interface Usuario {
 // Interfaz simple para controlar la sesión activa en React
 export interface UserState {
   username: string;
+  activo?: boolean;
   roles: string[];
 }
 
@@ -69,5 +70,6 @@ export interface UsuarioRanking {
   cincos?: number;
   cuatros?: number;
   tres?: number;
+  dos?: number;
   unos?: number;
 }

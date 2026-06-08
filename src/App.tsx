@@ -6,6 +6,7 @@ import AdminPanel from "./pages/AdminPanel";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import { Toaster } from "sonner";
+import CuentaInactiva from "./components/CuentaInactiva";
 
 function App() {
   return (
@@ -18,17 +19,16 @@ function App() {
           {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/cuenta-inactiva" element={<CuentaInactiva />} />
 
           {/*Para cualquier usuario logueado (USER o ADMIN) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
-
           {/* Exclusiva para administradores */}
           <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
             <Route path="/admin" element={<AdminPanel />} />
           </Route>
-
           {/* Redirección por defecto */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

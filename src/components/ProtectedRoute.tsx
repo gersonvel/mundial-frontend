@@ -6,13 +6,13 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
+  const { user, loading, isActivo } = useAuth();
 
   // Mientras se verifica si hay un token válido en el localStorage, mostramos un estado de carga
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-bold animate-pulse">
-        ⚽ Verificando credenciales de seguridad...
+        ⚽ Verificando credenciales...
       </div>
     );
   }
@@ -20,6 +20,13 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   //CONTROL 1: Si no está logueado, directo al Login
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // 3. CONTROL 1.5: Ya sabemos que 'user' existe con seguridad. Ahora sí evaluamos si está activo.
+  // Nota: Dejamos pasar a los administradores siempre para evitar que el admin se bloquee a sí mismo.
+  const esAdmin = user.roles?.includes("ROLE_ADMIN");
+  if (!isActivo() && !esAdmin) {
+    return <Navigate to="/cuenta-inactiva" replace />;
   }
 
   // CONTROL 2: Si la ruta exige roles específicos (como ser Admin) y el usuario no lo tiene, lo rebotamos

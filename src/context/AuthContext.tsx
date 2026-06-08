@@ -9,6 +9,7 @@ export interface AuthContextType {
   ) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   isAdmin: () => boolean;
+  isActivo: () => boolean;
   loading: boolean; // Se queda aquí para no romper contratos
 }
 

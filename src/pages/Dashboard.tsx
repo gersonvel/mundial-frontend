@@ -316,7 +316,7 @@ const Dashboard = () => {
 
         {loading ? (
           <div className="text-center py-12 text-slate-500 font-medium animate-pulse">
-            ⚽ Cargando cartelera y posiciones de la Quiniela...
+            ⚽ Cargando partidos...
           </div>
         ) : (
           <>
@@ -762,21 +762,27 @@ const Dashboard = () => {
                                 >
                                   5p: <strong>{row.cincos ?? 0}</strong>
                                 </span>
-                                <span
+                                {/* <span
                                   className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
                                   title="Ganador + Goles un equipo"
                                 >
                                   4p: <strong>{row.cuatros ?? 0}</strong>
-                                </span>
+                                </span> */}
                                 <span
-                                  className="inline-flex items-center gap-0.5 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
-                                  title="Solo ganador"
+                                  className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Ganador + Goles un equipo"
                                 >
                                   3p: <strong>{row.tres ?? 0}</strong>
                                 </span>
                                 <span
-                                  className="inline-flex items-center gap-0.5 bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  className="inline-flex items-center gap-0.5 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
                                   title="Solo goles un equipo"
+                                >
+                                  2p: <strong>{row.dos ?? 0}</strong>
+                                </span>
+                                <span
+                                  className="inline-flex items-center gap-0.5 bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-lg text-[11px] font-bold shadow-sm"
+                                  title="Ganador o empate sin importar goles"
                                 >
                                   1p: <strong>{row.unos ?? 0}</strong>
                                 </span>
@@ -809,17 +815,35 @@ const Dashboard = () => {
 
                 {/* Contenido principal estandarizado */}
                 <div className="p-6 text-sm text-slate-600 space-y-6">
-                  <div className="pt-2">
-                    <p className="text-amber-700 bg-amber-50/70 border border-amber-200 rounded-xl p-4 font-semibold leading-relaxed">
-                      Nota: La quiniela solo contempla los marcadores finales de
-                      los encuentros en el tiempo regular (90 min) y en tal
-                      caso, en el tiempo extra (+ 30 min). <br />
-                      No se considerarán para el conteo de puntos los resultados
-                      que se definan por penales, ni los goles anotados durante
-                      la tanda de penales. Esto garantiza una competencia justa
-                      y basada en el desempeño durante el tiempo reglamentario y
-                      extra.
-                    </p>
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Primera Fase de grupos
+                    </h3>
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        Esta quiniela considera el resultado y marcadores de
+                        cada partido.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Segunda fase (eliminación directa) hasta la final
+                    </h3>
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        Para la segunda fase, se considera los marcadores y el
+                        resultado de cada partido durante el tiempo regular más
+                        tiempos extra, en caso de que ocurran.
+                      </li>
+                      <li>
+                        No se considerarán los marcadores resultantes por goles
+                        anotados durante la tanda de penales. Esto garantiza una
+                        competencia justa y basada en el desempeño durante el
+                        tiempo reglamentario y extra.
+                      </li>
+                    </ul>
                   </div>
 
                   <div className="space-y-3">
@@ -830,8 +854,8 @@ const Dashboard = () => {
                       <li>
                         Debido a las limitaciones para ingresar a la plataforma,
                         el registro de pronósticos deberá realizarse de lunes a
-                        viernes, incluidos los partidos de fin de semana (sábado
-                        y domingo).
+                        viernes desde la red interna, incluidos los partidos de
+                        fin de semana (sábado y domingo).
                       </li>
                       <li>
                         De no registrarse el pronóstico antes del inicio del
@@ -846,7 +870,7 @@ const Dashboard = () => {
                     <h3 className="font-bold text-slate-800 text-base">
                       Asignación de puntos
                     </h3>
-                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                    {/* <ul className="pl-5 list-disc space-y-2 font-medium">
                       <li>
                         <strong className="text-slate-500">1 pt:</strong>{" "}
                         Acierto al marcador únicamente de un equipo.
@@ -865,6 +889,28 @@ const Dashboard = () => {
                         <strong className="text-green-600">5 pts:</strong>{" "}
                         Acierto al marcador exacto.
                       </li>
+                    </ul> */}
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        <strong className="text-slate-500">1 pt:</strong> Si se
+                        acierta solamente al resultado del partido (ganador ó
+                        empate, sin importar el marcador).
+                      </li>
+                      <li>
+                        <strong className="text-amber-600">2 pts:</strong> Si se
+                        acierta al marcador de un equipo (cantidad de goles
+                        anotados).
+                      </li>
+                      <li>
+                        <strong className="text-blue-600">3 pts:</strong> Si se
+                        acierta al resultado del ganador y al marcador de un
+                        solo equipo (1 pt + 2 pts).
+                      </li>
+                      <li>
+                        <strong className="text-green-600">5 pts:</strong> Si se
+                        acierta al resultado y a ambos marcadores del partido (1
+                        pt+2pts+2pts).
+                      </li>
                     </ul>
                   </div>
 
@@ -875,7 +921,7 @@ const Dashboard = () => {
                     <h3 className="font-bold text-slate-800 text-base">
                       Criterios de Desempate
                     </h3>
-                    <p className="font-medium text-slate-500">
+                    <p className="font-medium ">
                       Si dos o más jugadores terminan empatados en puntos
                       totales al finalizar el torneo, el sistema evaluará de
                       forma automática la{" "}
@@ -897,7 +943,7 @@ const Dashboard = () => {
                         </span>{" "}
                         Si continúan igualados, prevalecerá quien tenga más
                         aciertos de{" "}
-                        <strong className="text-blue-600">4 puntos</strong>.
+                        <strong className="text-blue-600">3 puntos</strong>.
                       </li>
                       <li>
                         <span className="font-bold text-slate-900">
@@ -905,7 +951,7 @@ const Dashboard = () => {
                         </span>{" "}
                         De persistir el empate, se considerará quien tenga más
                         aciertos de{" "}
-                        <strong className="text-amber-600">3 puntos</strong>.
+                        <strong className="text-amber-600">2 puntos</strong>.
                       </li>
                     </ul>
                   </div>
