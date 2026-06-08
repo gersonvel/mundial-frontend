@@ -827,6 +827,8 @@ const Dashboard = () => {
                     </ul>
                   </div>
 
+                  <hr className="border-slate-200" />
+
                   <div className="space-y-3">
                     <h3 className="font-bold text-slate-800 text-base">
                       Segunda fase (eliminación directa) hasta la final
@@ -845,6 +847,7 @@ const Dashboard = () => {
                       </li>
                     </ul>
                   </div>
+                  <hr className="border-slate-200" />
 
                   <div className="space-y-3">
                     <h3 className="font-bold text-slate-800 text-base">
@@ -864,6 +867,8 @@ const Dashboard = () => {
                       </li>
                     </ul>
                   </div>
+
+                  <hr className="border-slate-200" />
 
                   {/* SECCIÓN 1: ASIGNACIÓN DE PUNTOS */}
                   <div className="space-y-3">
@@ -914,7 +919,7 @@ const Dashboard = () => {
                     </ul>
                   </div>
 
-                  <hr className="border-slate-100" />
+                  <hr className="border-slate-200" />
 
                   {/* SECCIÓN 2: CRITERIOS DE DESEMPATE */}
                   <div className="space-y-3">
@@ -956,7 +961,7 @@ const Dashboard = () => {
                     </ul>
                   </div>
 
-                  <hr className="border-slate-100" />
+                  <hr className="border-slate-200" />
                   {/* SECCIÓN 3: Premio */}
                   <div className="space-y-3">
                     <h3 className="font-bold text-slate-800 text-base">
@@ -984,6 +989,24 @@ const Dashboard = () => {
                       </li>
                     </ul>
                   </div>
+
+                  <hr className="border-slate-200" />
+
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">
+                      Resultados oficiales
+                    </h3>
+                    <ul className="pl-5 list-disc space-y-2 font-medium">
+                      <li>
+                        Debido a las limitaciones para ingresar a la plataforma,
+                        el registro de los resultados oficiales se realizarán de
+                        lunes a viernes, incluidos los partidos de fin de semana
+                        (sábado y domingo).
+                      </li>
+                    </ul>
+                  </div>
+
+                  <hr className="border-slate-200" />
 
                   {/* NOTA DE CIERRE JUSTO */}
                   <div className="pt-2">
