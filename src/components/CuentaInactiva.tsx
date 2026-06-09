@@ -45,11 +45,14 @@ const CuentaInactiva = () => {
 
         {/* Caja de Acción Informativa */}
         <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-xs text-slate-600 font-medium text-left space-y-1">
-          <p className="font-bold text-slate-700">💡 ¿Qué debes hacer?</p>
+          <p className="font-bold text-slate-700">¿Qué debes hacer?</p>
           <p>
             1. Envía tu comprobante de registro al administrador de la quiniela.
           </p>
-          <p>2. Espera la confirmación y vuelve a iniciar sesión.</p>
+          <p>
+            2. Espera la confirmación, recarga la página o vuelve a iniciar
+            sesión.
+          </p>
         </div>
 
         {/* Botones */}

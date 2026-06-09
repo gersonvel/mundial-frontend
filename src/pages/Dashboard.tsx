@@ -13,6 +13,7 @@ import {
   IoNewspaperOutline,
 } from "react-icons/io5";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 interface PrediccionHistorial {
   id?: number;
@@ -136,10 +137,49 @@ const Dashboard = () => {
     };
   }, []);
 
+  // const handleGuardarPronostico = async (partidoId: number) => {
+  //   const gLocal = pronosticoLocal[partidoId];
+  //   const gVisitante = pronosticoVisitante[partidoId];
+
+  //   if (
+  //     gLocal === undefined ||
+  //     gVisitante === undefined ||
+  //     gLocal === "" ||
+  //     gVisitante === ""
+  //   ) {
+  //     toast.warning(
+  //       "¡Por favor introduce un marcador completo antes de guardar!",
+  //     );
+  //     // alert("¡Por favor introduce un marcador completo antes de guardar!");
+  //     return;
+  //   }
+
+  //   try {
+  //     await api.post("/predicciones", {
+  //       partidoId: partidoId,
+  //       golesLocalPred: parseInt(gLocal, 10),
+  //       golesVisitantePred: parseInt(gVisitante, 10),
+  //     });
+
+  //     toast.success("¡Pronóstico registrado con éxito!");
+  //     setPartidosPronosticados((prev) => [...prev, partidoId]);
+
+  //     const resPredicciones = await api.get<ResponseDTO<any[]>>(
+  //       "/predicciones/mis-predicciones",
+  //     );
+  //     setMisPrediccionesRaw(resPredicciones.data.data);
+  //   } catch (error: any) {
+  //     toast.error(
+  //       error.response?.data?.message || "Error al procesar tu pronóstico.",
+  //     );
+  //   }
+  // };
+
   const handleGuardarPronostico = async (partidoId: number) => {
     const gLocal = pronosticoLocal[partidoId];
     const gVisitante = pronosticoVisitante[partidoId];
 
+    // Tu validación original se mantiene intacta
     if (
       gLocal === undefined ||
       gVisitante === undefined ||
@@ -149,29 +189,43 @@ const Dashboard = () => {
       toast.warning(
         "¡Por favor introduce un marcador completo antes de guardar!",
       );
-      // alert("¡Por favor introduce un marcador completo antes de guardar!");
       return;
     }
 
-    try {
-      await api.post("/predicciones", {
-        partidoId: partidoId,
-        golesLocalPred: parseInt(gLocal, 10),
-        golesVisitantePred: parseInt(gVisitante, 10),
-      });
+    // NUEVO: Aquí se insertó el cuadro de confirmación
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Una vez que se envió tu pronóstico no se podrá cambiar.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#16a34a", // Color verde que combina con tu interfaz
+      cancelButtonColor: "#ef4444", // Color rojo para el botón de cancelar
+      confirmButtonText: "Sí, enviar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      // Si el usuario confirma, se ejecuta tu lógica de guardado de siempre
+      if (result.isConfirmed) {
+        try {
+          await api.post("/predicciones", {
+            partidoId: partidoId,
+            golesLocalPred: parseInt(gLocal, 10),
+            golesVisitantePred: parseInt(gVisitante, 10),
+          });
 
-      toast.success("¡Pronóstico registrado con éxito!");
-      setPartidosPronosticados((prev) => [...prev, partidoId]);
+          toast.success("¡Pronóstico registrado con éxito!");
+          setPartidosPronosticados((prev) => [...prev, partidoId]);
 
-      const resPredicciones = await api.get<ResponseDTO<any[]>>(
-        "/predicciones/mis-predicciones",
-      );
-      setMisPrediccionesRaw(resPredicciones.data.data);
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.message || "Error al procesar tu pronóstico.",
-      );
-    }
+          const resPredicciones = await api.get<ResponseDTO<any[]>>(
+            "/predicciones/mis-predicciones",
+          );
+          setMisPrediccionesRaw(resPredicciones.data.data);
+        } catch (error: any) {
+          toast.error(
+            error.response?.data?.message || "Error al procesar tu pronóstico.",
+          );
+        }
+      }
+    });
   };
 
   const formatearFecha = (fechaStr: string) => {
@@ -855,10 +909,9 @@ const Dashboard = () => {
                     </h3>
                     <ul className="pl-5 list-disc space-y-2 font-medium">
                       <li>
-                        Debido a las limitaciones para ingresar a la plataforma,
-                        el registro de pronósticos deberá realizarse de lunes a
-                        viernes desde la red interna, incluidos los partidos de
-                        fin de semana (sábado y domingo).
+                        El registro de pronósticos deberá realizarse de lunes a
+                        viernes, incluidos los partidos de fin de semana (sábado
+                        y domingo).
                       </li>
                       <li>
                         De no registrarse el pronóstico antes del inicio del
@@ -998,8 +1051,7 @@ const Dashboard = () => {
                     </h3>
                     <ul className="pl-5 list-disc space-y-2 font-medium">
                       <li>
-                        Debido a las limitaciones para ingresar a la plataforma,
-                        el registro de los resultados oficiales se realizarán de
+                        El registro de los resultados oficiales se realizarán de
                         lunes a viernes, incluidos los partidos de fin de semana
                         (sábado y domingo).
                       </li>

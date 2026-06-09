@@ -5,6 +5,8 @@ import {
   IoPersonAddOutline,
   IoLockClosedOutline,
   IoFootballOutline,
+  IoEye, // <- Agregado
+  IoEyeOff, // <- Agregado
 } from "react-icons/io5";
 import { toast } from "sonner";
 
@@ -14,6 +16,18 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Estados nuevos para controlar la visibilidad de manera independiente
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const navigate = useNavigate();
 
@@ -95,16 +109,27 @@ const Register = () => {
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
               Contraseña
             </label>
-            <div className="relative">
-              <IoLockClosedOutline className="absolute left-4 top-3.5 text-slate-500 w-5 h-5" />
+            <div className="relative flex items-center">
+              <IoLockClosedOutline className="absolute left-4 text-slate-500 w-5 h-5" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 placeholder="••••••••"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-12 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-12 pr-10 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-4 text-slate-500 hover:text-slate-300 focus:outline-none flex items-center"
+              >
+                {showPassword ? (
+                  <IoEyeOff className="w-5 h-5" />
+                ) : (
+                  <IoEye className="w-5 h-5" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -112,16 +137,27 @@ const Register = () => {
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
               Confirmar Contraseña
             </label>
-            <div className="relative">
-              <IoLockClosedOutline className="absolute left-4 top-3.5 text-slate-500 w-5 h-5" />
+            <div className="relative flex items-center">
+              <IoLockClosedOutline className="absolute left-4 text-slate-500 w-5 h-5" />
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 required
                 placeholder="••••••••"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-12 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-12 pr-10 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                className="absolute right-4 text-slate-500 hover:text-slate-300 focus:outline-none flex items-center"
+              >
+                {showConfirmPassword ? (
+                  <IoEyeOff className="w-5 h-5" />
+                ) : (
+                  <IoEye className="w-5 h-5" />
+                )}
+              </button>
             </div>
           </div>
 

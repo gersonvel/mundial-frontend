@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import { IoFootball } from "react-icons/io5"; // Icono de balón de fútbol de react-icons
+import { IoFootball, IoEye, IoEyeOff } from "react-icons/io5";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -50,9 +56,6 @@ const Login = () => {
           <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">
             Quiniela Mundial 2026
           </h2>
-          {/* <p className="mt-2 text-sm text-gray-600">
-            Inicia sesión para registrar tus pronósticos
-          </p> */}
         </div>
 
         {/* Alerta de Error en caso de credenciales incorrectas */}
@@ -85,14 +88,31 @@ const Login = () => {
               <label className="text-sm font-semibold text-gray-700 block mb-1">
                 Contraseña
               </label>
-              <input
-                type="password"
-                required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-950 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm transition-colors"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              {/* 1. SE AGREGÓ UN CONTENEDOR RELATIVO AQUÍ */}
+              <div className="relative flex items-center">
+                <input
+                  // 2. AHORA EL TIPO CAMBIA DINÁMICAMENTE
+                  type={showPassword ? "text" : "password"}
+                  required
+                  // 3. CAMBIÉ px-3 POR pl-3 Y pr-10 PARA QUE EL TEXTO NO SE LE ENCIEME AL OJO
+                  className="w-full rounded-lg border border-gray-300 pl-3 pr-10 py-2 text-gray-950 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm transition-colors"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 text-gray-400 hover:text-gray-600 focus:outline-none flex items-center"
+                >
+                  {/* 4. NOTA: Invertí los iconos para que IoEyeOff aparezca cuando está oculto y IoEye cuando se ve */}
+                  {showPassword ? (
+                    <IoEyeOff className="h-5 w-5" />
+                  ) : (
+                    <IoEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -111,7 +131,7 @@ const Login = () => {
               to="/register"
               className="text-green-600 hover:underline font-bold"
             >
-              Registrate
+              Regístrate
             </Link>
           </div>
         </form>

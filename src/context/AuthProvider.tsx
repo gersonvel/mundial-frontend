@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser({ username: loggedUser, activo, roles });
         localStorage.setItem("roles", JSON.stringify(roles));
       } catch (error) {
-        console.error("Token inválido o expirado en el refresco:", error);
+        console.error("Token inválido o expirado:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         localStorage.removeItem("roles");
