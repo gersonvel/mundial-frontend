@@ -7,6 +7,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import { Toaster } from "sonner";
 import CuentaInactiva from "./components/CuentaInactiva";
+import AdminUsuarios from "./pages/AdminUsuarios";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           {/* Exclusiva para administradores */}
           <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/usuarios" element={<AdminUsuarios />} />
           </Route>
           {/* Redirección por defecto */}
           <Route path="*" element={<Navigate to="/login" replace />} />
