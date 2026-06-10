@@ -130,12 +130,12 @@ export const AdminUsuarios = () => {
                           {u.activo ? (
                             <>
                               <IoCheckmarkCircleOutline className="w-4 h-4" />
-                              ACTIVO / JUGANDO
+                              ACTIVO
                             </>
                           ) : (
                             <>
                               <IoCloseCircleOutline className="w-4 h-4" />
-                              INACTIVO (Clic p/ Activar)
+                              INACTIVO
                             </>
                           )}
                         </button>

@@ -68,7 +68,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser({ username: loggedUser, activo, roles });
       return { success: true };
     } catch (error: any) {
-      return { success: false, message: "Error al iniciar sesión" };
+      return {
+        success: false,
+        message: error.response?.data || "Error al iniciar sesión",
+      };
     }
   };
 
