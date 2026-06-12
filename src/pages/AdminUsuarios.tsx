@@ -8,6 +8,7 @@ import {
   IoCheckmarkCircleOutline,
   IoCloseCircleOutline,
   IoKeyOutline,
+  IoEye,
 } from "react-icons/io5";
 
 interface UsuarioData {

@@ -11,6 +11,8 @@ import {
   IoEyeOutline,
   IoFilterOutline,
   IoNewspaperOutline,
+  IoEye,
+  IoCloseSharp,
 } from "react-icons/io5";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
@@ -31,6 +33,11 @@ const Dashboard = () => {
   const [misPrediccionesRaw, setMisPrediccionesRaw] = useState<
     PrediccionHistorial[]
   >([]);
+
+  const [modalPartidoId, setModalPartidoId] = useState<number | null>(null);
+  const [modalInfoPartido, setModalInfoPartido] = useState<any>(null); // Guardar nombres de los equipos
+  const [pronosticosComunidad, setPronosticosComunidad] = useState<any[]>([]);
+  const [loadingComunidad, setLoadingComunidad] = useState<boolean>(false);
 
   const [vistaActiva, setVistaActiva] = useState<
     "partidos" | "ranking" | "mis_pronosticos" | "criterio_desempate"
@@ -301,6 +308,28 @@ const Dashboard = () => {
     const ahora = new Date();
     return fechaPartido > ahora && partido.estado !== "JUGADO";
   });
+
+  const abrirModalComunidad = async (partido: any) => {
+    setModalPartidoId(partido.id);
+    setModalInfoPartido(partido);
+    console.log(partido);
+    setLoadingComunidad(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get(
+        `/predicciones/partidos/${partido.id}/comunidad`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setPronosticosComunidad(response.data);
+    } catch (error) {
+      toast.error("No se pudieron cargar los pronósticos de la comunidad");
+    } finally {
+      setLoadingComunidad(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-green-500 selection:text-white">
@@ -618,13 +647,11 @@ const Dashboard = () => {
                               Resultado Oficial
                             </div>
                           )}
-
                           {!esFinalizado && esNoApostado && (
                             <div className="absolute top-0 right-0 bg-red-600 text-white font-bold text-[10px] tracking-wider uppercase px-3 py-1 rounded-bl-xl">
                               No Jugado
                             </div>
                           )}
-
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-[10px] font-black uppercase bg-slate-100 text-slate-500 border border-slate-200 px-2 py-0.5 rounded-md">
                               {part.fase.replace("_", " ")} -{" "}
@@ -636,7 +663,6 @@ const Dashboard = () => {
                               {formatearFecha(part.fechaHora)}
                             </span>
                           </div>
-
                           <div className="grid grid-cols-3 items-center text-center my-3 bg-slate-50/50 rounded-xl p-3 border border-slate-100">
                             <div className="flex items-center justify-end gap-3 min-w-0">
                               <div className="text-right min-w-0">
@@ -689,7 +715,6 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </div>
-
                           {esFinalizado ? (
                             <>
                               <div className="mt-3 pt-3 border-t border-dashed border-slate-200 flex items-center justify-between text-xs">
@@ -732,6 +757,15 @@ const Dashboard = () => {
                               )}
                             </div>
                           )}
+                          <div className="mt-4 pt-3 border-t border-slate-100">
+                            <button
+                              onClick={() => abrirModalComunidad(pred.partido)}
+                              className="w-full bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-xl py-2 px-4 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
+                            >
+                              <IoEye className="h-5 w-5" /> Ver pronósticos de
+                              los demás participantes
+                            </button>
+                          </div>{" "}
                         </div>
                       );
                     })}
@@ -1060,7 +1094,6 @@ const Dashboard = () => {
 
                   <hr className="border-slate-200" />
 
-                  {/* NOTA DE CIERRE JUSTO */}
                   <div className="pt-2">
                     <p className="text-amber-700 bg-amber-50/70 border border-amber-200 rounded-xl p-4 font-semibold leading-relaxed">
                       Nota: En el caso extremo de que persista un empate
@@ -1074,6 +1107,112 @@ const Dashboard = () => {
               </div>
             )}
           </>
+        )}
+
+        {modalPartidoId && modalInfoPartido && (
+          <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+            <div className="bg-white rounded-3xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl border border-slate-100">
+              {/* Header del Modal */}
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50 rounded-t-3xl">
+                <div>
+                  {/* <h3 className="text-sm font-black text-slate-800 uppercase tracking-wide">
+                    Pronósticos
+                  </h3> */}
+                  <p className="text-xs text-slate-500 mt-0.5 font-medium flex items-center gap-2 whitespace-nowrap">
+                    <span>{modalInfoPartido.equipoLocal}</span>
+
+                    <img
+                      src={`/banderas/${modalInfoPartido.banderaLocal}`}
+                      alt={modalInfoPartido.equipoLocal}
+                      className="w-7 h-5 sm:w-9 sm:h-6 object-cover rounded-sm sm:rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                    />
+
+                    <span className="text-slate-400 mx-1">vs</span>
+
+                    <img
+                      src={`/banderas/${modalInfoPartido.banderaVisitante}`}
+                      alt={modalInfoPartido.equipoVisitante}
+                      className="w-7 h-5 sm:w-9 sm:h-6 object-cover rounded-sm sm:rounded-md shadow-sm border border-slate-200 flex-shrink-0"
+                    />
+
+                    <span>{modalInfoPartido.equipoVisitante}</span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setModalPartidoId(null);
+                    setModalInfoPartido(null);
+                  }}
+                  className="text-slate-400 hover:text-slate-600 bg-white border border-slate-200 p-1.5 rounded-xl transition-colors cursor-pointer text-xs font-bold"
+                >
+                  <IoCloseSharp />
+                </button>
+              </div>
+
+              {/* Contenido / Tabla */}
+              <div className="p-5 overflow-y-auto flex-1">
+                {loadingComunidad ? (
+                  <div className="text-center py-8 text-xs font-bold text-slate-400 animate-pulse">
+                    ⚽ Consultando las apuestas del grupo...
+                  </div>
+                ) : pronosticosComunidad.length === 0 ? (
+                  <div className="text-center py-8 text-xs text-slate-400 font-medium">
+                    Nadie más ha enviado pronósticos para este partido aún.
+                  </div>
+                ) : (
+                  <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-green-700 text-white text-[10px] font-black uppercase tracking-wider">
+                          <th className="p-3">Usuario</th>
+                          <th className="p-3 text-center">
+                            {modalInfoPartido.equipoLocal}
+                          </th>
+                          <th className="p-3 text-center">
+                            {modalInfoPartido.equipoVisitante}
+                          </th>
+                          <th className="p-3 text-center">Puntos</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-slate-700 text-xs font-medium">
+                        {pronosticosComunidad.map((item, index) => {
+                          const partidoTerminado =
+                            modalInfoPartido.estado === "JUGADO";
+                          return (
+                            <tr
+                              key={index}
+                              className="hover:bg-slate-50 transition-colors"
+                            >
+                              <td className="p-3 font-bold text-slate-900">
+                                {item.username}
+                              </td>
+                              <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
+                                {item.golesLocalPred}
+                              </td>
+                              <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
+                                {item.golesVisitantePred}
+                              </td>
+                              <td className="p-3 text-center">
+                                {partidoTerminado ? (
+                                  <span className="bg-green-50 text-green-700 font-black px-2 py-0.5 rounded-md border border-green-200/50">
+                                    {item.puntosGanados} pts
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-400 font-bold tracking-widest">
+                                    -
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         )}
       </main>
     </div>
