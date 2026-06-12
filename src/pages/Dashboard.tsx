@@ -1160,54 +1160,66 @@ const Dashboard = () => {
                     Nadie más ha enviado pronósticos para este partido aún.
                   </div>
                 ) : (
+                  // 1. Contenedor principal de la tabla
                   <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-green-700 text-white text-[10px] font-black uppercase tracking-wider">
-                          <th className="p-3">Usuario</th>
-                          <th className="p-3 text-center">
-                            {modalInfoPartido.equipoLocal}
-                          </th>
-                          <th className="p-3 text-center">
-                            {modalInfoPartido.equipoVisitante}
-                          </th>
-                          <th className="p-3 text-center">Puntos</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700 text-xs font-medium">
-                        {pronosticosComunidad.map((item, index) => {
-                          const partidoTerminado =
-                            modalInfoPartido.estado === "JUGADO";
-                          return (
-                            <tr
-                              key={index}
-                              className="hover:bg-slate-50 transition-colors"
-                            >
-                              <td className="p-3 font-bold text-slate-900">
-                                {item.username}
-                              </td>
-                              <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
-                                {item.golesLocalPred}
-                              </td>
-                              <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
-                                {item.golesVisitantePred}
-                              </td>
-                              <td className="p-3 text-center">
-                                {partidoTerminado ? (
-                                  <span className="bg-green-50 text-green-700 font-black px-2 py-0.5 rounded-md border border-green-200/50">
-                                    {item.puntosGanados} pts
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400 font-bold tracking-widest">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                    <div className="overflow-x-auto w-full">
+                      {/* Le añadimos min-w-full para que ocupe todo el espacio si el cel es ancho */}
+                      <table className="w-full min-w-full text-left border-collapse table-auto">
+                        <thead>
+                          <tr className="bg-green-700 text-white text-[10px] font-black uppercase tracking-wider">
+                            <th className="p-3 whitespace-nowrap">Usuario</th>
+                            <th className="p-3 text-center whitespace-nowrap max-w-[100px] truncate">
+                              {modalInfoPartido.equipoLocal}
+                            </th>
+                            <th className="p-3 text-center whitespace-nowrap max-w-[100px] truncate">
+                              {modalInfoPartido.equipoVisitante}
+                            </th>
+                            <th className="p-3 text-center whitespace-nowrap">
+                              Puntos
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-700 text-xs font-medium">
+                          {pronosticosComunidad.map((item, index) => {
+                            const partidoTerminado =
+                              modalInfoPartido.estado === "JUGADO";
+                            return (
+                              <tr
+                                key={index}
+                                className="hover:bg-slate-50 transition-colors"
+                              >
+                                <td className="p-3 font-bold text-slate-900 whitespace-nowrap">
+                                  {item.username}
+                                </td>
+                                <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
+                                  {item.golesLocalPred}
+                                </td>
+                                <td className="p-3 text-center font-black bg-slate-50/50 text-sm text-slate-800">
+                                  {item.golesVisitantePred}
+                                </td>
+                                <td className="p-3 text-center whitespace-nowrap">
+                                  {partidoTerminado ? (
+                                    <span
+                                      className={`font-black px-2 py-0.5 rounded-md border tracking-wider transition-all ${
+                                        item.puntosGanados === 0
+                                          ? "bg-slate-100 text-slate-500 border-slate-200"
+                                          : "bg-green-50 text-green-700 border-green-200/50"
+                                      }`}
+                                    >
+                                      {item.puntosGanados} pts
+                                    </span>
+                                  ) : (
+                                    <span className="text-slate-400 font-bold tracking-widest">
+                                      -
+                                    </span>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </div>
